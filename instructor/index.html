@@ -216,6 +216,15 @@
   </div><!--/div.accordion-item-->
 </div><!--/div.accordion-flush-->
 
+<div class="accordion accordion-flush" id="accordionFlush3">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading3">
+        <a href="do_qtl_mapping.html">2. QTL Mapping in Diversity Outbred Mice</a>
+    </div><!--/div.accordion-header-->
+
+  </div><!--/div.accordion-item-->
+</div><!--/div.accordion-flush-->
+
                 </div>
               </div>
             </div>
@@ -289,6 +298,19 @@ How do you write a lesson using R Markdown and <a href="https://carpentries.gith
 <span class="visually-hidden">Duration: </span>00h 12m
 </td>
 <td>
+ 2. <a href="do_qtl_mapping.html">QTL Mapping in Diversity Outbred
+Mice</a>
+</td>
+<td>
+How do I map traits in Diversity Outbred mice?<br>How do I interpret
+the founder allele effects at a QTL peak?<br>How do I perform
+association mapping in Diversity Outbred mice?<br>How do I narrow down
+the set of candidate genes under a QTL?
+</td>
+</tr><tr><td>
+<span class="visually-hidden">Duration: </span>02h 42m
+</td>
+<td>
 Finish
 </td>
 <td>
@@ -322,7 +344,7 @@ console.</li>
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">install.packages</span><span class="op">(</span><span class="fu">c</span><span class="op">(</span><span class="st">"qtl2"</span>, <span class="st">"qtl2convert"</span><span class="op">)</span><span class="op">)</span></span></code></pre>
+<code class="sourceCode R"><span><span class="fu">install.packages</span><span class="op">(</span><span class="fu">c</span><span class="op">(</span><span class="st">"tidyverse"</span>, <span class="st">"qtl2"</span>, <span class="st">"qtl2convert"</span><span class="op">)</span><span class="op">)</span></span></code></pre>
 </div>
 <p>Once the installation is complete, load the libraries to make sure
 that they installed correctly.</p>
@@ -330,7 +352,8 @@ that they installed correctly.</p>
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw">library</span><span class="op">(</span><span class="va">qtl2</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw">library</span><span class="op">(</span><span class="va">tidyverse</span><span class="op">)</span></span>
+<span><span class="kw">library</span><span class="op">(</span><span class="va">qtl2</span><span class="op">)</span></span>
 <span><span class="kw">library</span><span class="op">(</span><span class="va">qtl2convert</span><span class="op">)</span></span></code></pre>
 </div>
 <p>If the libraries don’t load and you recieved errors during the
@@ -373,8 +396,8 @@ console.</p>
 <span>              destfile <span class="op">=</span> <span class="st">"data/qtl2_demo_grcm39.Rdata"</span>,</span>
 <span>              mode     <span class="op">=</span> <span class="st">"wb"</span><span class="op">)</span></span></code></pre>
 </div>
-<p>Next, we need a database of the DO founder SNPs and gene
-positions.</p>
+<p>Next, we need a database of the DO founder SNPs and gene positions.
+This file is 10 GB, so it will take a while to download.</p>
 <div class="codewrapper sourceCode" id="cb5">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
