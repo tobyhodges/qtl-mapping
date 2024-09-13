@@ -67,6 +67,7 @@ contact: 'susan.mcclatchy@jax.org'
 # Order of episodes in your lesson
 episodes: 
 - introduction.Rmd
+- do_qtl_mapping.Rmd
 
 # Information for Learners
 learners: 
