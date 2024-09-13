@@ -22,7 +22,7 @@ Choose the free RStudio Desktop version for Windows, Mac, or Linux.
     c. Install qtl2 by copying and pasting the following code in the R console.
 
 ```r
-install.packages(c("tidyverse", "qtl2", "qtl2convert"))
+install.packages(c("tidyverse", "ggbeeswarm", qtl2", "qtl2convert"))
 ```
 
 Once the installation is complete, load the libraries to make sure that they 
@@ -30,6 +30,7 @@ installed correctly.
 
 ```r
 library(tidyverse)
+library(ggbeeswarm)
 library(qtl2)
 library(qtl2convert)
 ```
@@ -68,6 +69,14 @@ The first file contains the Diversity Outbred mapping data.
 ```r
 download.file(url      = "https://thejacksonlaboratory.box.com/shared/static/wspizp2jgrtngvvw5ixredpu7627mh5w.rdata",
               destfile = "data/qtl2_demo_grcm39.Rdata",
+              mode     = "wb")
+```
+
+Next, download the MUGA marker positions from Karl Broman's Github page.
+
+```r
+download.file(url      = "https://raw.githubusercontent.com/kbroman/MUGAarrays/main/UWisc/muga_uwisc_v4.csv",
+              destfile = "data/muga_uwisc_v4.csv",
               mode     = "wb")
 ```
 
