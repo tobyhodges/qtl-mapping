@@ -271,6 +271,17 @@ The log of the bone marrow MN-RET values look more normally distributed.
 
 :::::::::::::::::::::::::::::::::::::
 
+Let's add a column containing the log-transformed phenotype to our `pheno`
+object.
+
+
+``` r
+pheno <- pheno |>
+           mutate(log_mnret = log(prop.bm.mn.ret))
+```
+
+
+
 Some researchers are concerned about the reproducibility of DO studies. The 
 argument is that each DO mouse is unique and therefore can never be reproduced. 
 But this misses the point of using the DO. While mice are the sampling unit, in 
@@ -319,7 +330,7 @@ Warning: Removed 29 rows containing missing values or values outside the scale r
 (`geom_point()`).
 ```
 
-<img src="fig/do_qtl_mapping-rendered-unnamed-chunk-8-1.png" style="display: block; margin: auto;" />
+<img src="fig/do_qtl_mapping-rendered-unnamed-chunk-9-1.png" style="display: block; margin: auto;" />
 
 As you can see, while individual mice have varying micronucleated 
 reticulocytes, there is a dose-dependent increase in micronucleated reticulocytes
@@ -513,6 +524,13 @@ samples are in the first dimension, the 8 founders in the second and the
 Let's return to the `probs` object. Look at the contents of one sample on 
 chromosome 1.
 
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: instructor
+
+This code is intended to throw an error. It is used to illustrate the point
+that you have to align the markers between `probs` and `map`.
+
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
 
 ``` r
 plot_genoprob(probs, map, ind = 1, chr = 1)
@@ -522,7 +540,6 @@ Uh oh! We have an error which says "Different numbers of positions in probs and
 map". This means that the number of markers in the genoprobs and the marker
 map is different. In fact, this is quite important. The markers in `probs` and
 `map` must match **exactly** on every chromosome.
-
 
 ::::::::::::::::::::::::::::::::::::: challenge
 
@@ -580,7 +597,7 @@ allele probabilities for one sample on chromosome 1.
 plot_genoprob(probs, map, ind = 1, chr = 1, main = "Founder Allele Probabilities")
 ```
 
-<img src="fig/do_qtl_mapping-rendered-unnamed-chunk-18-1.png" style="display: block; margin: auto;" />
+<img src="fig/do_qtl_mapping-rendered-unnamed-chunk-19-1.png" style="display: block; margin: auto;" />
 
 In the plot above, the founder contributions, which range between 0 and 1, are 
 colored from white (= 0) to black (= 1.0). A value of ~0.5 is grey. The markers 
@@ -630,9 +647,499 @@ indicate varying levels of kinship between 0 and 1. The dark red diagonal of the
 matrix indicates that each sample is identical to itself. The orange blocks 
 along the diagonal may indicate close relatives (i.e. siblings or cousins).
 
+### Covariates    
+
+Next, we need to create additive covariates that will be used in the mapping 
+model. We will use study cohort as a covariate in the mapping model. This is the
+same as outbreeding generation since each cohort was purchased from successive
+generations. If we were mapping with *all* mice, we would also add benzene 
+concentration to the model. This study contained only male mice, but in most 
+cases, you would include sex as an additive covariate as well.
+
+To recap, you would normally add sex and outbreeding generation to the model.
+In this case, we have one sex and are using `study` instead of generation.
+
+
+``` r
+addcovar <- model.matrix(~study, data = pheno)[,-1, drop = FALSE]
+```
+
+The code above copies the `rownames(pheno)` to `rownames(addcovar)` as a side-effect.
+
+::::::::::::::::::::::::::::::::::::: callout
+
+The sample IDs **must** be in the rownames of `pheno`, `addcovar`, `genoprobs` 
+and `K`. `qtl2` uses the sample IDs to align the samples between objects. For 
+more information about data file format, see
+[Karl Broman's vignette on input file format](http://kbroman.org/qtl2/assets/vignettes/input_files.html).
+
+:::::::::::::::::::::::::::::::::::::
+
+## Performing a Genome Scan
+
+Before we perform our first genome scan, let's look at the mapping model. At 
+each marker on the genotyping array, we will fit a model that regresses the 
+phenotype (micronucleated reticulocytes) on covariates and the founder allele 
+proportions.  
+
+$y_i = \beta_ss_i+\sum_{j=1}^8(\beta_jg_{ij}) + \lambda_i + \epsilon_i$
+
+where:  
+  
+$y_i$ is the phenotype for mouse $i$,
+$\beta_s$ is the effect of study cohort,
+$s_i$ is the study cohort for mouse $i$,
+$\beta_j$ is the effect of founder allele $j$,
+$g_{ij}$ is the probability that mouse $i$ carries an allele from founder $j$,
+$\lambda_;<sub>_i$ is an adjustment for kinship-induced correlated errors for mouse $i$,
+$\epsilon_i$ is the residual error for mouse $i$.
+
+Note that this model will give us an estimate of the effect of each of the 
+eight founder alleles at each marker. This will be important when we estimate
+the founder allele effects below.
+
+There are almost 600 samples in this data set and it may take several minutes to
+map one trait. In order to save some time, we will map using only the samples in
+the 100 ppm concentration group. We will create a smaller phenotype data.frame.
+
+
+``` r
+pheno_100 <- pheno[pheno$conc == 100,]
+```
+
+::::::::::::::::::::::::::::::::::::: challenge
+
+## Challenge 8: How many mice are we mapping with?
+
+Get the number of rows in `pheno_100`.
+
+:::::::::::::::::::::::: solution
+
+You can do this by looking at the number of observations for `pheno_100` in the 
+Environment tab or in the Console.
+
+
+``` r
+nrow(pheno_100)
+```
+
+``` output
+[1] 149
+```
+
+There are 149 mice in `pheno_100`.
+
+::::::::::::::::::::::::
+
+:::::::::::::::::::::::::::::::::::::
+
+In order to map the proportion of bone marrow reticulocytes that were 
+micro-nucleated, you will use the 
+[scan1](https://github.com/rqtl/qtl2/blob/master/R/plot_scan1.R) function. To 
+see the arguments for 
+[scan1](https://github.com/rqtl/qtl2/blob/master/R/plot_scan1.R), you can type 
+`help(scan1)`. First, let's map the *untransformed* phenotype. 
+(Recall that we log-transformed it above).
+
+
+``` r
+index <- which(colnames(pheno_100) == "prop.bm.mn.ret")
+lod   <- scan1(genoprobs = probs, 
+               pheno     = pheno_100[,index, drop = FALSE], 
+               kinship   = K, 
+               addcovar  = addcovar)
+```
+
+Next, we plot the genome scan.
+
+
+``` r
+plot_scan1(x    = lod, 
+           map  = map, 
+           main = "Proportion of Micro-nucleated Bone Marrow Reticulocytes")
+```
+
+<img src="fig/do_qtl_mapping-rendered-qtl_plot-1.png" style="display: block; margin: auto;" />
+
+It looks like we have a large peak on chromosome 10. 
+
+::::::::::::::::::::::::::::::::::::: challenge
+
+## Challenge 9: How does a log-tranformation change the QTL plot?
+
+1. Perform a genome scan on the column called `log_mnret`. (Hint: set `index` 
+to the column index in `pheno`.)  
+2. How does the LOD score for the peak on Chr 10 change?
+
+:::::::::::::::::::::::: solution
+
+
+``` r
+index <- which(colnames(pheno_100) == "log_mnret")
+lod2  <- scan1(genoprobs = probs, 
+               pheno     = pheno_100[,index, drop = FALSE], 
+               kinship   = K, 
+               addcovar  = addcovar)
+plot_scan1(x    = lod2, 
+           map  = map, 
+           main = "(log(Proportion of Micro-nucleated Bone Marrow Reticulocytes)")
+```
+
+<img src="fig/do_qtl_mapping-rendered-unnamed-chunk-22-1.png" style="display: block; margin: auto;" />
+
+Using a log transformation increases the LOD increase from about 17 to over 25.
+
+::::::::::::::::::::::::
+
+:::::::::::::::::::::::::::::::::::::
+
+The challenge shows the importance of looking at your data and transforming it 
+to meet the expectations of the mapping model. In this case, a log 
+transformation improved the model fit and increased the LOD score. We will 
+continue the rest of this lesson using the log-transformed data. Set your 
+`index` variable equal to the column index of `log.MN.RET`. Redo the genome scan
+with the log-transformed reticulocytes.
+
+
+``` r
+index <- which(colnames(pheno) == "log_mnret")
+lod   <- scan1(genoprobs = probs, 
+               pheno     = pheno_100[, index,  drop = FALSE], 
+               kinship   = K, 
+               addcovar  = addcovar)
+```
+
+## Assessing Significance of LOD Scores
+
+There is clearly a large peak on Chr 10. But is it significant? In other words,
+could we see a LOD score over 25 by chance? And if so, what is the probability 
+of seeing a LOD of 25 or higher? 
+
+These questions are most commonly answered via 
+[permutation](http://www.genetics.org/content/178/1/609.long) of the sample
+labels and recording the maximum LOD score in each permutation. This procedure 
+breaks the connection between the phenotypes and the genotypes of the mice, so 
+the results represent the expected LOD by chance.
+
+Imagine that you shuffle the sample labels in the phenotype file and map the
+resampled trait. Then you record the maximum LOD across the genome. You would
+get a table that looks like this:
+
+Permutation | Max LOD 
+------------|--------
+     1      |   1.7
+     2      |   3.2
+     3      |   2.2
+     4      |   1.8
+     5      |   2.3
+    ...     |   ...
+
+Once you ran 1,000 permutations, you could plot a histogram of the maximum LOD
+values. 
+
+
+``` r
+perms   = readRDS('./data/sim_perm1000.rds')
+```
+
+``` warning
+Warning in gzfile(file, "rb"): cannot open compressed file
+'./data/sim_perm1000.rds', probable reason 'No such file or directory'
+```
+
+``` error
+Error in gzfile(file, "rb"): cannot open the connection
+```
+
+``` r
+max_lod = apply(perms, 2, max)
+```
+
+``` error
+Error in eval(expr, envir, enclos): object 'perms' not found
+```
+
+``` r
+hist(max_lod, breaks = 100, main = 'Histogram of Max. LOD')
+```
+
+``` error
+Error in eval(expr, envir, enclos): object 'max_lod' not found
+```
+
+``` r
+q95 = quantile(max_lod, probs = 0.95)
+```
+
+``` error
+Error in eval(expr, envir, enclos): object 'max_lod' not found
+```
+
+``` r
+abline(v = q95, col = 'red', lwd = 2)
+```
+
+``` error
+Error in eval(expr, envir, enclos): object 'q95' not found
+```
+
+In this case, the maximum LOD score is around 9. Most of the values fall 
+between 5 and 6. We have drawn a red line at the 95th percentile of the 
+distribution. LOD values above this are likely to occur 5% of the time. That
+means 1 in 20 times. We often use this 95th percentile as our significance
+threshold for one trait.
+
+We advise running at least 1,000 permutations to obtain significance thresholds.
+In the interest of time, we perform 100 permutations here using the 
+[scan1perm]() function.
+
+
+``` r
+perms <- scan1perm(genoprobs = probs, 
+                   pheno     = pheno_100[,index, drop = FALSE], 
+                   kinshp    = K,
+                   addcovar  = addcovar, 
+                   n_perm    = 100)
+```
+
+The `perms` object contains the maximum LOD score from each genome scan of 
+permuted data.
+
+::::::::::::::::::::::::::::::::::::: challenge
+
+## Challenge 10: How does a log-tranformation change the QTL plot?
+
+1. Create a histogram of the LOD scores `perms`. Hint: use the `hist()` function.  
+2. Estimate the value of the LOD score at the 95th percentile.  
+3. Then find the value of the LOD score at the 95th percentile using the 
+`summary()` function.  
+
+:::::::::::::::::::::::: solution
+
+
+``` r
+hist(x = perms, breaks = 15)
+```
+
+<img src="fig/do_qtl_mapping-rendered-unnamed-chunk-24-1.png" style="display: block; margin: auto;" />
+
+``` r
+summary(perms)
+```
+
+``` output
+LOD thresholds (100 permutations)
+     log_mnret
+0.05      7.18
+```
+
+Note that this summary function returns the 95th percentile value of the LOD
+distribution.
+
+::::::::::::::::::::::::
+
+:::::::::::::::::::::::::::::::::::::
+
+We can now add thresholds to the previous QTL plot. We use a significance 
+threshold of p < 0.05. To do this, we select the 95th percentile of the 
+permutation LOD distribution.
+           
+
+``` r
+plot(x    = lod, 
+     map  = map,  
+     main = "Proportion of Micro-nucleated Bone Marrow Reticulocytes")
+thr = summary(perms)
+add_threshold(map = map, thresholdA = thr, col = 'red')
+```
+
+<img src="fig/do_qtl_mapping-rendered-unnamed-chunk-25-1.png" style="display: block; margin: auto;" />
+
+The peak on Chr 10 is well above the red significance line.
+
+## Finding LOD Peaks
+
+We can find all of the peaks above the significance threshold using the 
+[find_peaks](https://github.com/rqtl/qtl2/blob/master/R/find_peaks.R) function.
+
+
+``` r
+find_peaks(scan1_output = lod,
+           map          = map, 
+           threshold    = thr)
+```
+
+``` output
+  lodindex lodcolumn chr      pos      lod
+1        1 log_mnret  10 33.52438 27.01701
+```
+
+::::::::::::::::::::::::::::::::::::: challenge
+
+## Challenge 11: How does a log-tranformation change the QTL plot?
+
+Find all peaks for this scan whether or not they meet the 95% significance threshold.
+
+:::::::::::::::::::::::: solution
+
+
+``` r
+find_peaks(scan1_output = lod, 
+           map          = map)
+```
+
+``` output
+   lodindex lodcolumn chr        pos       lod
+1         1 log_mnret   1   4.601252  3.594686
+2         1 log_mnret   2 141.066196  5.351645
+3         1 log_mnret   3 124.914616  3.904994
+4         1 log_mnret   4 132.636314  5.501382
+5         1 log_mnret   6  85.246537  5.965923
+6         1 log_mnret   7  44.136809  4.325292
+7         1 log_mnret   8  26.176972  3.073792
+8         1 log_mnret   9   8.115893  4.027077
+9         1 log_mnret  10  33.524378 27.017008
+10        1 log_mnret  11  48.605368  3.563292
+11        1 log_mnret  12  28.480475  3.549043
+12        1 log_mnret  13 109.752043  3.111400
+13        1 log_mnret  16  72.091039  5.263606
+14        1 log_mnret  17  12.528523  3.659285
+15        1 log_mnret  18  65.977753  3.894702
+16        1 log_mnret   X   8.770202  4.059789
+```
+
+Notice that some peaks are missing because they don't meet the default threshold
+value of 3. See `help(find_peaks)` for more information about this function.
+
+::::::::::::::::::::::::
+
+:::::::::::::::::::::::::::::::::::::
+
+The support interval is determined using the  
+[Bayesian Credible Interval](http://www.ncbi.nlm.nih.gov/pubmed/11560912) and 
+represents the region most likely to contain the causative polymorphism(s). We 
+can obtain this interval by adding a `prob` argument to 
+[find_peaks](https://github.com/rqtl/qtl2/blob/master/R/find_peaks.R). We pass 
+in a value of `0.95` to request a support interval that contains the causal SNP 
+95% of the time.
+
+
+``` r
+find_peaks(scan1_output = lod, 
+           map          = map, 
+           threshold    = thr, 
+           prob         = 0.95)
+```
+
+``` output
+  lodindex lodcolumn chr      pos      lod   ci_lo    ci_hi
+1        1 log_mnret  10 33.52438 27.01701 31.7442 34.05311
+```
+
+From the output above, you can see that the support interval is 2.3 Mb wide 
+(31.7442 to 34.05311 Mb). The location of the maximum LOD score is at 33.52438 Mb.
+
+## Estimated Founder Allele Effects
+
+We will now zoom in on Chr 10 and look at the contribution of each of the eight
+founder alleles to the proportion of bone marrow reticulocytes that were 
+micro-nucleated. Remember, the mapping model above estimates the effect of each 
+of the eight DO founders. We can plot these effects (also called 'coefficients')
+across Chr 10 using [scan1coef](https://github.com/rqtl/qtl2/blob/master/R/scan1coef.R).
+
+
+``` r
+chr    <- 10
+coef10 <- scan1blup(genoprobs = probs[,chr], 
+                    pheno     = pheno_100[,index, drop = FALSE], 
+                    kinship   = K[[chr]], 
+                    addcovar  = addcovar)
+```
+
+This produces an object containing estimates of each of the eight DO founder 
+allele effect. These are the <i>&beta;<sub>j</sub></i> values in the mapping 
+equation above.
+
+
+``` r
+plot_coefCC(x    = coef10, 
+            map  = map, 
+            scan1_output = lod, 
+            main = "Proportion of Micro-nucleated Bone Marrow Reticulocytes")
+```
+
+<img src="fig/do_qtl_mapping-rendered-coef_plot-1.png" style="display: block; margin: auto;" />
+
+The top panel shows the eight founder allele effects (or model coefficients) 
+along Chr 10. The founder allele effects are centered at zero and the units are 
+the same as the phenotype. You can see that DO mice containing the CAST/EiJ 
+allele near 34 Mb have lower levels of micro-nucleated reticulocytes. This means
+that the CAST allele is associated with less DNA damage and has a protective 
+effect. The bottom panel shows the LOD score, with the support interval for the 
+peak shaded blue. 
+
+## SNP Association Mapping
+
+At this point, we have a 2.3 Mb wide support interval that contains 
+polymorphism(s) that influence benzene-induced DNA damage. Next, we will impute 
+the DO founder sequences onto the DO genomes. The 
+[Mouse Genomes Project](https://www.mousegenomes.org/)
+has sequenced the eight DO founders and provides SNP, insertion-deletion 
+(indel), and structural variant files for the strains (see 
+[Baud et.al., Nat. Gen., 2013](http://www.nature.com/ng/journal/v45/n7/full/ng.2644.html)). 
+We can impute these SNPs onto the DO genomes and then perform association 
+mapping. The process involves several steps and I have provided a function to 
+encapsulate the steps. To access the Sanger SNPs, we use a SQLlite database 
+provided by [Karl Broman](https://github.com/kbroman). You should have 
+downloaded this during Setup. It is available from  
+[figshare](https://figshare.com/ndownloader/files/40157572), but the file is 
+10 GB, so it may take too long to download right now.
+
+![](./figures/DO.impute.founders.sm.png)
+
+Association mapping involves imputing the founder SNPs onto each DO genome and 
+fitting the mapping model at each SNP. At each marker, we fit the following model:  
+
+$y_{im} = \beta_ss_i+\beta_mg_{im} + \lambda_i + \epsilon_i$
+
+where:
+
+$y_i$ is the phenotype for mouse $i$,
+$\beta_s$ is the effect of study cohort,
+$s_i$ is the study cohort for mouse $i$,
+$\beta_m$ is the effect of adding one allele at marker $m$,
+$g_{im}$ is the allele call for mouse $i$ at marker $m$>,
+$\lambda_i$ is an adjustment for kinship-induced correlated errors for mouse $i$,
+$\epsilon_i$ is the residual error for mouse $i$.
+
+We can call [scan1snps](https://github.com/rqtl/qtl2/blob/master/R/scan1snps.R) 
+to perform association mapping in the QTL interval on Chr 10. We first create 
+variables for the chromosome and support interval where we are mapping. We then 
+create a function to get the SNPs from the founder SNP database. Note that it is
+important to use the `keep_all_snps = TRUE` in order to return all SNPs.
+
+<!-- DMG: Not sure how to do association mapping with a 10 GB file. We might 
+have to do a static figure. -->
+
+```{reval=FALSE}
+chr   <- 10
+start <- 30
+end   <- 36
+query_func <- create_variant_query_func("./data/cc_variants.sqlite")
+assoc      <- scan1snps(genoprobs  = probs[,chr], 
+                        map        = map, 
+                        pheno      = pheno_100[,index,drop = FALSE], 
+                        kinship    = K, 
+                        addcovar   = addcovar, 
+                        query_func = query_func, 
+                        chr        = chr, 
+                        start      = start, 
+                        end        = end, 
+                        keep_all_snps = TRUE)
+```
+
+
 <!-- DMG: STOPPED HERE -->
-
-
 
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: instructor
 
