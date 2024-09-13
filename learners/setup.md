@@ -22,13 +22,14 @@ Choose the free RStudio Desktop version for Windows, Mac, or Linux.
     c. Install qtl2 by copying and pasting the following code in the R console.
 
 ```r
-install.packages(c("qtl2", "qtl2convert"))
+install.packages(c("tidyverse", "qtl2", "qtl2convert"))
 ```
 
 Once the installation is complete, load the libraries to make sure that they 
 installed correctly. 
 
 ```r
+library(tidyverse)
 library(qtl2)
 library(qtl2convert)
 ```
@@ -70,7 +71,8 @@ download.file(url      = "https://thejacksonlaboratory.box.com/shared/static/wsp
               mode     = "wb")
 ```
 
-Next, we need a database of the DO founder SNPs and gene positions.
+Next, we need a database of the DO founder SNPs and gene positions. This file
+is 10 GB, so it will take a while to download.
 
 ```r
 download.file(url      = "https://figshare.com/ndownloader/files/40157572",
