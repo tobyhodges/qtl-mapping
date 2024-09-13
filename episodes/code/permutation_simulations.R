@@ -60,15 +60,15 @@ results = data.frame(results) %>%
                          names_to = 'n_perm', values_to = 'threshold') %>%
             mutate(n_perm = str_replace(n_perm, 'X', ''))
 
-png(file.path(out_dir, ',,', 'figures', 'permutation_simulations.png'),
-    width = 800, height = 800)
+png(file.path(out_dir, '..', 'figures', 'permutation_simulations.png'),
+    width = 800, height = 800, res = 128)
 p = results %>%
   ggplot(aes(n_perm, threshold)) +
     geom_boxplot() +
     labs(title = 'Variance of Sig. Thr. Estimate',
          x = 'Number of permutations',
          y = 'Significane Threshold') +
-    theme(text = element_text(size = 20))
+    theme(text = element_text(size = 24))
 print(p)
 dev.off()
 
