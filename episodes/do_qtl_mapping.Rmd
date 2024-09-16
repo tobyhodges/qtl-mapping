@@ -104,19 +104,6 @@ Github. The `*.Rdata` file is over 200 Mb and Github has a file size limit of
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-<!--DMG: Checking what the working directory is when the lesson builds.  -->
-
-```{r}
-getwd()
-```
-
-
-```{r}
-dir()
-```
-
-
-
 ```{r include = FALSE}
 # We have to build the probs object for the Workbench site. The students can
 # load it in directly.
