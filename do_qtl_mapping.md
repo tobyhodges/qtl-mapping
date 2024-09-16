@@ -105,34 +105,6 @@ Github. The `*.Rdata` file is over 200 Mb and Github has a file size limit of
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-<!--DMG: Checking what the working directory is when the lesson builds.  -->
-
-
-``` r
-getwd()
-```
-
-``` output
-[1] "/home/runner/work/qtl-mapping/qtl-mapping/site/built"
-```
-
-
-
-``` r
-dir()
-```
-
-``` output
- [1] "CODE_OF_CONDUCT.md"  "config.yaml"         "data"               
- [4] "do_qtl_mapping.md"   "fig"                 "files"              
- [7] "index.md"            "instructor-notes.md" "introduction.md"    
-[10] "learner-profiles.md" "LICENSE.md"          "links.md"           
-[13] "md5sum.txt"          "reference.md"        "renv.lock"          
-[16] "setup.md"           
-```
-
-
-
 
 
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: instructor
@@ -254,7 +226,7 @@ Warning: Removed 29 rows containing non-finite outside the scale range
 (`stat_bin()`).
 ```
 
-<img src="fig/do_qtl_mapping-rendered-unnamed-chunk-8-1.png" style="display: block; margin: auto;" />
+<img src="fig/do_qtl_mapping-rendered-unnamed-chunk-6-1.png" style="display: block; margin: auto;" />
 
 The bone marrow MN-RET values do not look normally distributed.
 
@@ -291,7 +263,7 @@ Warning: Removed 29 rows containing non-finite outside the scale range
 (`stat_bin()`).
 ```
 
-<img src="fig/do_qtl_mapping-rendered-unnamed-chunk-9-1.png" style="display: block; margin: auto;" />
+<img src="fig/do_qtl_mapping-rendered-unnamed-chunk-7-1.png" style="display: block; margin: auto;" />
 
 The log of the bone marrow MN-RET values look more normally distributed.
 
@@ -358,7 +330,7 @@ Warning: Removed 29 rows containing missing values or values outside the scale r
 (`geom_point()`).
 ```
 
-<img src="fig/do_qtl_mapping-rendered-unnamed-chunk-11-1.png" style="display: block; margin: auto;" />
+<img src="fig/do_qtl_mapping-rendered-unnamed-chunk-9-1.png" style="display: block; margin: auto;" />
 
 As you can see, while individual mice have varying micronucleated 
 reticulocytes, there is a dose-dependent increase in micronucleated reticulocytes
@@ -625,7 +597,7 @@ allele probabilities for one sample on chromosome 1.
 plot_genoprob(probs, map, ind = 1, chr = 1, main = "Founder Allele Probabilities")
 ```
 
-<img src="fig/do_qtl_mapping-rendered-unnamed-chunk-21-1.png" style="display: block; margin: auto;" />
+<img src="fig/do_qtl_mapping-rendered-unnamed-chunk-19-1.png" style="display: block; margin: auto;" />
 
 In the plot above, the founder contributions, which range between 0 and 1, are 
 colored from white (= 0) to black (= 1.0). A value of ~0.5 is grey. The markers 
@@ -813,7 +785,7 @@ plot_scan1(x    = lod2,
            main = "(log(Proportion of Micro-nucleated Bone Marrow Reticulocytes)")
 ```
 
-<img src="fig/do_qtl_mapping-rendered-unnamed-chunk-24-1.png" style="display: block; margin: auto;" />
+<img src="fig/do_qtl_mapping-rendered-unnamed-chunk-22-1.png" style="display: block; margin: auto;" />
 
 Using a log transformation increases the LOD increase from about 17 to over 25.
 
@@ -868,48 +840,13 @@ values.
 
 ``` r
 perms   = readRDS('./data/sim_perm1000.rds')
-```
-
-``` warning
-Warning in gzfile(file, "rb"): cannot open compressed file
-'./data/sim_perm1000.rds', probable reason 'No such file or directory'
-```
-
-``` error
-Error in gzfile(file, "rb"): cannot open the connection
-```
-
-``` r
 max_lod = apply(perms, 2, max)
-```
-
-``` error
-Error in eval(expr, envir, enclos): object 'perms' not found
-```
-
-``` r
 hist(max_lod, breaks = 100, main = 'Histogram of Max. LOD')
-```
-
-``` error
-Error in eval(expr, envir, enclos): object 'max_lod' not found
-```
-
-``` r
 q95 = quantile(max_lod, probs = 0.95)
-```
-
-``` error
-Error in eval(expr, envir, enclos): object 'max_lod' not found
-```
-
-``` r
 abline(v = q95, col = 'red', lwd = 2)
 ```
 
-``` error
-Error in eval(expr, envir, enclos): object 'q95' not found
-```
+<img src="fig/do_qtl_mapping-rendered-unnamed-chunk-23-1.png" style="display: block; margin: auto;" />
 
 In this case, the maximum LOD score is around 9. Most of the values fall 
 between 5 and 6. We have drawn a red line at the 95th percentile of the 
@@ -949,7 +886,7 @@ permuted data.
 hist(x = perms, breaks = 15)
 ```
 
-<img src="fig/do_qtl_mapping-rendered-unnamed-chunk-26-1.png" style="display: block; margin: auto;" />
+<img src="fig/do_qtl_mapping-rendered-unnamed-chunk-24-1.png" style="display: block; margin: auto;" />
 
 ``` r
 summary(perms)
@@ -958,7 +895,7 @@ summary(perms)
 ``` output
 LOD thresholds (100 permutations)
      log_mnret
-0.05      7.29
+0.05      7.06
 ```
 
 Note that this summary function returns the 95th percentile value of the LOD
@@ -981,7 +918,7 @@ thr = summary(perms)
 add_threshold(map = map, thresholdA = thr, col = 'red')
 ```
 
-<img src="fig/do_qtl_mapping-rendered-unnamed-chunk-27-1.png" style="display: block; margin: auto;" />
+<img src="fig/do_qtl_mapping-rendered-unnamed-chunk-25-1.png" style="display: block; margin: auto;" />
 
 The peak on Chr 10 is well above the red significance line.
 
@@ -1096,7 +1033,7 @@ plot_coefCC(x    = coef10,
             main = "Proportion of Micro-nucleated Bone Marrow Reticulocytes")
 ```
 
-<img src="fig/do_qtl_mapping-rendered-coef_plot-1.png" style="display: block; margin: auto;" />
+<img src="fig/do_qtl_mapping-rendered-unnamed-chunk-27-1.png" style="display: block; margin: auto;" />
 
 The top panel shows the eight founder allele effects (or model coefficients) 
 along Chr 10. The founder allele effects are centered at zero and the units are 
@@ -1123,7 +1060,7 @@ downloaded this during Setup. It is available from
 [figshare](https://figshare.com/ndownloader/files/40157572), but the file is 
 10 GB, so it may take too long to download right now.
 
-![SNP Imputation](./figures/DO.impute.founders.sm.png){alt="Fiugure showing haplotypes being used to impute founder SNPs onto DO genomes.",width=75%}
+![SNP Imputation](./figures/DO.impute.founders.sm.png){alt="Figure showing haplotypes being used to impute founder SNPs onto DO genomes.",width=75%}
 
 Association mapping involves imputing the founder SNPs onto each DO genome and 
 fitting the mapping model at each SNP. At each marker, we fit the following model:  
@@ -1215,7 +1152,7 @@ head(genes)
 ```
 
 
-````output
+```output
           ensembl_id ensembl_version    Name                     name chromosome start_position end_position strand    start
 1 ENSMUSG00000000295              14   Hddc2   HD domain containing 2         10       31189379     31204200      1 31.18938
 2 ENSMUSG00000000296               9 Tpd52l1 tumor protein D52-like 1         10       31208372     31321954     -1 31.20837
@@ -1444,7 +1381,7 @@ plot the results and plot the genes beneath the association mapping plot.
 hist(pheno$pre.prop.mn.ret)
 ```
 
-<img src="fig/do_qtl_mapping-rendered-unnamed-chunk-34-1.png" style="display: block; margin: auto;" />
+<img src="fig/do_qtl_mapping-rendered-unnamed-chunk-33-1.png" style="display: block; margin: auto;" />
 
 Log transform the pre-dose proportion of MN-RETs.
 
@@ -1479,7 +1416,7 @@ plot_scan1(x    = lod_pre,
            main = "Log-Transformed Pre-dose micronucleated reticulocytes")
 ```
 
-<img src="fig/do_qtl_mapping-rendered-unnamed-chunk-38-1.png" style="display: block; margin: auto;" />
+<img src="fig/do_qtl_mapping-rendered-unnamed-chunk-37-1.png" style="display: block; margin: auto;" />
 
 3. Find peaks above a significance threshold.
 
@@ -1510,7 +1447,7 @@ plot_coefCC(x            = coef4,
             main         = "Log-Transformed Pre-dose micronucleated reticulocytes")
 ```
 
-<img src="fig/do_qtl_mapping-rendered-unnamed-chunk-40-1.png" style="display: block; margin: auto;" />
+<img src="fig/do_qtl_mapping-rendered-unnamed-chunk-39-1.png" style="display: block; margin: auto;" />
 
 5. Perform association mapping in the QTL interval for the highest peak.
 
