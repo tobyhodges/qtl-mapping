@@ -519,7 +519,7 @@ for(i in seq_along(probs)) {
 Now that we have aligned the markers in `probs` and `map`, let's plot the 
 allele probabilities for one sample on chromosome 1.
 
-```{r fig.width=8}
+```{r fig.width=10,height=6}
 plot_genoprob(probs, map, ind = 1, chr = 1, main = "Founder Allele Probabilities")
 ```
 
@@ -664,7 +664,7 @@ lod   <- scan1(genoprobs = probs,
 
 Next, we plot the genome scan.
 
-```{r qtl_plot, fig.width=8, fig.height=6, warning=FALSE}
+```{r qtl_plot, fig.width=10, fig.height=8, warning=FALSE}
 plot_scan1(x    = lod, 
            map  = map, 
            main = "Proportion of Micro-nucleated Bone Marrow Reticulocytes")
@@ -682,7 +682,7 @@ to the column index in `pheno`.)
 
 :::::::::::::::::::::::: solution
 
-```{r}
+```{r fig.width=10,fig.height=8}
 index <- which(colnames(pheno_100) == "log_mnret")
 lod2  <- scan1(genoprobs = probs, 
                pheno     = pheno_100[,index, drop = FALSE], 
@@ -742,7 +742,7 @@ Permutation | Max LOD
 Once you ran 1,000 permutations, you could plot a histogram of the maximum LOD
 values. 
 
-```{r}
+```{r fig.width=10,fig.height=8}
 perms   = readRDS('./data/sim_perm1000.rds')
 max_lod = apply(perms, 2, max)
 hist(max_lod, breaks = 100, main = 'Histogram of Max. LOD')
@@ -782,7 +782,7 @@ permuted data.
 
 :::::::::::::::::::::::: solution
 
-```{r}
+```{r fig.width=10,fig.height=8}
 hist(x = perms, breaks = 15)
 summary(perms)
 ```
@@ -798,7 +798,7 @@ We can now add thresholds to the previous QTL plot. We use a significance
 threshold of p < 0.05. To do this, we select the 95th percentile of the 
 permutation LOD distribution.
            
-```{r fig.width=8, fig.height=6, warning=FALSE}
+```{r fig.width=10,fig.height=8,warning=FALSE}
 plot(x    = lod, 
      map  = map,  
      main = "Proportion of Micro-nucleated Bone Marrow Reticulocytes")
@@ -877,7 +877,7 @@ This produces an object containing estimates of each of the eight DO founder
 allele effect. These are the <i>&beta;<sub>j</sub></i> values in the mapping 
 equation above.
 
-```{r coef_plot, fig.width=8, fig.height=6}
+```{r fig.width=10,fig.height=8}
 plot_coefCC(x    = coef10, 
             map  = map, 
             scan1_output = lod, 
@@ -909,7 +909,7 @@ downloaded this during Setup. It is available from
 [figshare](https://figshare.com/ndownloader/files/40157572), but the file is 
 10 GB, so it may take too long to download right now.
 
-![SNP Imputation](./figures/DO.impute.founders.sm.png){alt="Fiugure showing haplotypes being used to impute founder SNPs onto DO genomes.",width=75%}
+![SNP Imputation](./figures/DO.impute.founders.sm.png){alt="Figure showing haplotypes being used to impute founder SNPs onto DO genomes.",width=75%}
 
 Association mapping involves imputing the founder SNPs onto each DO genome and 
 fitting the mapping model at each SNP. At each marker, we fit the following model:  
@@ -998,7 +998,7 @@ head(genes)
 ```
 
 
-````output
+```output
           ensembl_id ensembl_version    Name                     name chromosome start_position end_position strand    start
 1 ENSMUSG00000000295              14   Hddc2   HD domain containing 2         10       31189379     31204200      1 31.18938
 2 ENSMUSG00000000296               9 Tpd52l1 tumor protein D52-like 1         10       31208372     31321954     -1 31.20837
