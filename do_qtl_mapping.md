@@ -105,6 +105,20 @@ Github. The `*.Rdata` file is over 200 Mb and Github has a file size limit of
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
+<!--DMG: Checking what the working directory is when the lesson builds.  -->
+
+
+``` r
+getwd()
+```
+
+``` output
+[1] "/home/runner/work/qtl-mapping/qtl-mapping/site/built"
+```
+
+
+
+
 
 
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: instructor
@@ -226,7 +240,7 @@ Warning: Removed 29 rows containing non-finite outside the scale range
 (`stat_bin()`).
 ```
 
-<img src="fig/do_qtl_mapping-rendered-unnamed-chunk-6-1.png" style="display: block; margin: auto;" />
+<img src="fig/do_qtl_mapping-rendered-unnamed-chunk-7-1.png" style="display: block; margin: auto;" />
 
 The bone marrow MN-RET values do not look normally distributed.
 
@@ -263,7 +277,7 @@ Warning: Removed 29 rows containing non-finite outside the scale range
 (`stat_bin()`).
 ```
 
-<img src="fig/do_qtl_mapping-rendered-unnamed-chunk-7-1.png" style="display: block; margin: auto;" />
+<img src="fig/do_qtl_mapping-rendered-unnamed-chunk-8-1.png" style="display: block; margin: auto;" />
 
 The log of the bone marrow MN-RET values look more normally distributed.
 
@@ -330,7 +344,7 @@ Warning: Removed 29 rows containing missing values or values outside the scale r
 (`geom_point()`).
 ```
 
-<img src="fig/do_qtl_mapping-rendered-unnamed-chunk-9-1.png" style="display: block; margin: auto;" />
+<img src="fig/do_qtl_mapping-rendered-unnamed-chunk-10-1.png" style="display: block; margin: auto;" />
 
 As you can see, while individual mice have varying micronucleated 
 reticulocytes, there is a dose-dependent increase in micronucleated reticulocytes
@@ -597,7 +611,7 @@ allele probabilities for one sample on chromosome 1.
 plot_genoprob(probs, map, ind = 1, chr = 1, main = "Founder Allele Probabilities")
 ```
 
-<img src="fig/do_qtl_mapping-rendered-unnamed-chunk-19-1.png" style="display: block; margin: auto;" />
+<img src="fig/do_qtl_mapping-rendered-unnamed-chunk-20-1.png" style="display: block; margin: auto;" />
 
 In the plot above, the founder contributions, which range between 0 and 1, are 
 colored from white (= 0) to black (= 1.0). A value of ~0.5 is grey. The markers 
@@ -785,7 +799,7 @@ plot_scan1(x    = lod2,
            main = "(log(Proportion of Micro-nucleated Bone Marrow Reticulocytes)")
 ```
 
-<img src="fig/do_qtl_mapping-rendered-unnamed-chunk-22-1.png" style="display: block; margin: auto;" />
+<img src="fig/do_qtl_mapping-rendered-unnamed-chunk-23-1.png" style="display: block; margin: auto;" />
 
 Using a log transformation increases the LOD increase from about 17 to over 25.
 
@@ -921,7 +935,7 @@ permuted data.
 hist(x = perms, breaks = 15)
 ```
 
-<img src="fig/do_qtl_mapping-rendered-unnamed-chunk-24-1.png" style="display: block; margin: auto;" />
+<img src="fig/do_qtl_mapping-rendered-unnamed-chunk-25-1.png" style="display: block; margin: auto;" />
 
 ``` r
 summary(perms)
@@ -930,7 +944,7 @@ summary(perms)
 ``` output
 LOD thresholds (100 permutations)
      log_mnret
-0.05      7.38
+0.05      7.15
 ```
 
 Note that this summary function returns the 95th percentile value of the LOD
@@ -953,7 +967,7 @@ thr = summary(perms)
 add_threshold(map = map, thresholdA = thr, col = 'red')
 ```
 
-<img src="fig/do_qtl_mapping-rendered-unnamed-chunk-25-1.png" style="display: block; margin: auto;" />
+<img src="fig/do_qtl_mapping-rendered-unnamed-chunk-26-1.png" style="display: block; margin: auto;" />
 
 The peak on Chr 10 is well above the red significance line.
 
@@ -1171,30 +1185,37 @@ CAST/EiJ contributes the alternate allele.
 
 You might naturally ask what genes are under this QTL peak. We will query the 
 SNP/gens database for the genes in the interval. As before, we will create a
-function to query the genes in a specific interval of the genome. 
+function to query the genes in a specific interval of the genome.
 
 
 ``` r
 # Create function to query gene database.
-query_genes <- create_gene_query_func(dbfile      = "./data/fv.2021.snps.db3",
+query_genes <- create_gene_query_func(dbfile   = "./data/fv.2021.snps.db3",
                                    chr_field   = "chromosome", 
                                    name_field  = "symbol",
                                    start_field = "start_position", 
                                    stop_field  = "end_position")
 
 genes <- query_genes(chr, start, end)
-```
-
-``` error
-Error in query_genes(chr, start, end): File ./data/fv.2021.snps.db3 doesn't exist
-```
-
-``` r
 head(genes)
 ```
 
-``` error
-Error in eval(expr, envir, enclos): object 'genes' not found
+
+````output
+          ensembl_id ensembl_version    Name                     name chromosome start_position end_position strand    start
+1 ENSMUSG00000000295              14   Hddc2   HD domain containing 2         10       31189379     31204200      1 31.18938
+2 ENSMUSG00000000296               9 Tpd52l1 tumor protein D52-like 1         10       31208372     31321954     -1 31.20837
+3 ENSMUSG00000019779              16     Frk       fyn-related kinase         10       34359395     34487274      1 34.35939
+4 ENSMUSG00000019782              11   Rwdd1  RWD domain containing 1         10       33872551     33895620     -1 33.87255
+5 ENSMUSG00000019785              15   Clvs2               clavesin 2         10       33388282     33500765     -1 33.38828
+6 ENSMUSG00000019787              10    Trdn                  triadin         10       32956550     33352705      1 32.95655
+      stop
+1 31.20420
+2 31.32195
+3 34.48727
+4 33.89562
+5 33.50077
+6 33.35271
 ```
 
 The `genes` object contains annotation information for each gene in the interval.
@@ -1409,7 +1430,7 @@ plot the results and plot the genes beneath the association mapping plot.
 hist(pheno$pre.prop.mn.ret)
 ```
 
-<img src="fig/do_qtl_mapping-rendered-unnamed-chunk-32-1.png" style="display: block; margin: auto;" />
+<img src="fig/do_qtl_mapping-rendered-unnamed-chunk-33-1.png" style="display: block; margin: auto;" />
 
 Log transform the pre-dose proportion of MN-RETs.
 
@@ -1444,7 +1465,7 @@ plot_scan1(x    = lod_pre,
            main = "Log-Transformed Pre-dose micronucleated reticulocytes")
 ```
 
-<img src="fig/do_qtl_mapping-rendered-unnamed-chunk-36-1.png" style="display: block; margin: auto;" />
+<img src="fig/do_qtl_mapping-rendered-unnamed-chunk-37-1.png" style="display: block; margin: auto;" />
 
 3. Find peaks above a significance threshold.
 
@@ -1475,7 +1496,7 @@ plot_coefCC(x            = coef4,
             main         = "Log-Transformed Pre-dose micronucleated reticulocytes")
 ```
 
-<img src="fig/do_qtl_mapping-rendered-unnamed-chunk-38-1.png" style="display: block; margin: auto;" />
+<img src="fig/do_qtl_mapping-rendered-unnamed-chunk-39-1.png" style="display: block; margin: auto;" />
 
 5. Perform association mapping in the QTL interval for the highest peak.
 
@@ -1517,8 +1538,51 @@ plot_snpasso(scan1output = assoc4$lod,
 :::::::::::::::::::::::
 :::::::::::::::::::::::::::::::::::::
 
-```r
+
+``` r
 sessionInfo()
+```
+
+``` output
+R version 4.4.1 (2024-06-14)
+Platform: x86_64-pc-linux-gnu
+Running under: Ubuntu 22.04.4 LTS
+
+Matrix products: default
+BLAS:   /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.10.0 
+LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.10.0
+
+locale:
+ [1] LC_CTYPE=C.UTF-8       LC_NUMERIC=C           LC_TIME=C.UTF-8       
+ [4] LC_COLLATE=C.UTF-8     LC_MONETARY=C.UTF-8    LC_MESSAGES=C.UTF-8   
+ [7] LC_PAPER=C.UTF-8       LC_NAME=C              LC_ADDRESS=C          
+[10] LC_TELEPHONE=C         LC_MEASUREMENT=C.UTF-8 LC_IDENTIFICATION=C   
+
+time zone: UTC
+tzcode source: system (glibc)
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] qtl2convert_0.30 qtl2_0.36        ggbeeswarm_0.7.2 lubridate_1.9.3 
+ [5] forcats_1.0.0    stringr_1.5.1    dplyr_1.1.4      purrr_1.0.2     
+ [9] readr_2.1.5      tidyr_1.3.1      tibble_3.2.1     ggplot2_3.5.1   
+[13] tidyverse_2.0.0 
+
+loaded via a namespace (and not attached):
+ [1] utf8_1.2.4         generics_0.1.3     renv_1.0.7         RSQLite_2.3.7     
+ [5] stringi_1.8.4      hms_1.1.3          magrittr_2.0.3     RColorBrewer_1.1-3
+ [9] evaluate_0.24.0    grid_4.4.1         timechange_0.3.0   fastmap_1.2.0     
+[13] blob_1.2.4         DBI_1.2.3          fansi_1.0.6        scales_1.3.0      
+[17] qtl_1.70           cli_3.6.3          rlang_1.1.4        bit64_4.0.5       
+[21] munsell_0.5.1      withr_3.0.1        cachem_1.1.0       yaml_2.3.10       
+[25] tools_4.4.1        parallel_4.4.1     tzdb_0.4.0         memoise_2.0.1     
+[29] colorspace_2.1-1   vctrs_0.6.5        R6_2.5.1           lifecycle_1.0.4   
+[33] bit_4.0.5          vipor_0.4.7        pkgconfig_2.0.3    beeswarm_0.4.0    
+[37] pillar_1.9.0       gtable_0.3.5       glue_1.7.0         data.table_1.16.0 
+[41] Rcpp_1.0.13        highr_0.11         xfun_0.46          tidyselect_1.2.1  
+[45] knitr_1.48         farver_2.1.2       labeling_0.4.3     compiler_4.4.1    
 ```
 
 ::::::::::::::::::::::::::::::::::::: keypoints 
