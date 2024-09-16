@@ -118,6 +118,20 @@ getwd()
 
 
 
+``` r
+dir()
+```
+
+``` output
+ [1] "CODE_OF_CONDUCT.md"  "config.yaml"         "data"               
+ [4] "do_qtl_mapping.md"   "fig"                 "files"              
+ [7] "index.md"            "instructor-notes.md" "introduction.md"    
+[10] "learner-profiles.md" "LICENSE.md"          "links.md"           
+[13] "md5sum.txt"          "reference.md"        "renv.lock"          
+[16] "setup.md"           
+```
+
+
 
 
 
@@ -240,7 +254,7 @@ Warning: Removed 29 rows containing non-finite outside the scale range
 (`stat_bin()`).
 ```
 
-<img src="fig/do_qtl_mapping-rendered-unnamed-chunk-7-1.png" style="display: block; margin: auto;" />
+<img src="fig/do_qtl_mapping-rendered-unnamed-chunk-8-1.png" style="display: block; margin: auto;" />
 
 The bone marrow MN-RET values do not look normally distributed.
 
@@ -277,7 +291,7 @@ Warning: Removed 29 rows containing non-finite outside the scale range
 (`stat_bin()`).
 ```
 
-<img src="fig/do_qtl_mapping-rendered-unnamed-chunk-8-1.png" style="display: block; margin: auto;" />
+<img src="fig/do_qtl_mapping-rendered-unnamed-chunk-9-1.png" style="display: block; margin: auto;" />
 
 The log of the bone marrow MN-RET values look more normally distributed.
 
@@ -344,7 +358,7 @@ Warning: Removed 29 rows containing missing values or values outside the scale r
 (`geom_point()`).
 ```
 
-<img src="fig/do_qtl_mapping-rendered-unnamed-chunk-10-1.png" style="display: block; margin: auto;" />
+<img src="fig/do_qtl_mapping-rendered-unnamed-chunk-11-1.png" style="display: block; margin: auto;" />
 
 As you can see, while individual mice have varying micronucleated 
 reticulocytes, there is a dose-dependent increase in micronucleated reticulocytes
@@ -611,7 +625,7 @@ allele probabilities for one sample on chromosome 1.
 plot_genoprob(probs, map, ind = 1, chr = 1, main = "Founder Allele Probabilities")
 ```
 
-<img src="fig/do_qtl_mapping-rendered-unnamed-chunk-20-1.png" style="display: block; margin: auto;" />
+<img src="fig/do_qtl_mapping-rendered-unnamed-chunk-21-1.png" style="display: block; margin: auto;" />
 
 In the plot above, the founder contributions, which range between 0 and 1, are 
 colored from white (= 0) to black (= 1.0). A value of ~0.5 is grey. The markers 
@@ -799,7 +813,7 @@ plot_scan1(x    = lod2,
            main = "(log(Proportion of Micro-nucleated Bone Marrow Reticulocytes)")
 ```
 
-<img src="fig/do_qtl_mapping-rendered-unnamed-chunk-23-1.png" style="display: block; margin: auto;" />
+<img src="fig/do_qtl_mapping-rendered-unnamed-chunk-24-1.png" style="display: block; margin: auto;" />
 
 Using a log transformation increases the LOD increase from about 17 to over 25.
 
@@ -935,7 +949,7 @@ permuted data.
 hist(x = perms, breaks = 15)
 ```
 
-<img src="fig/do_qtl_mapping-rendered-unnamed-chunk-25-1.png" style="display: block; margin: auto;" />
+<img src="fig/do_qtl_mapping-rendered-unnamed-chunk-26-1.png" style="display: block; margin: auto;" />
 
 ``` r
 summary(perms)
@@ -944,7 +958,7 @@ summary(perms)
 ``` output
 LOD thresholds (100 permutations)
      log_mnret
-0.05      7.15
+0.05      7.29
 ```
 
 Note that this summary function returns the 95th percentile value of the LOD
@@ -967,7 +981,7 @@ thr = summary(perms)
 add_threshold(map = map, thresholdA = thr, col = 'red')
 ```
 
-<img src="fig/do_qtl_mapping-rendered-unnamed-chunk-26-1.png" style="display: block; margin: auto;" />
+<img src="fig/do_qtl_mapping-rendered-unnamed-chunk-27-1.png" style="display: block; margin: auto;" />
 
 The peak on Chr 10 is well above the red significance line.
 
@@ -1430,7 +1444,7 @@ plot the results and plot the genes beneath the association mapping plot.
 hist(pheno$pre.prop.mn.ret)
 ```
 
-<img src="fig/do_qtl_mapping-rendered-unnamed-chunk-33-1.png" style="display: block; margin: auto;" />
+<img src="fig/do_qtl_mapping-rendered-unnamed-chunk-34-1.png" style="display: block; margin: auto;" />
 
 Log transform the pre-dose proportion of MN-RETs.
 
@@ -1465,7 +1479,7 @@ plot_scan1(x    = lod_pre,
            main = "Log-Transformed Pre-dose micronucleated reticulocytes")
 ```
 
-<img src="fig/do_qtl_mapping-rendered-unnamed-chunk-37-1.png" style="display: block; margin: auto;" />
+<img src="fig/do_qtl_mapping-rendered-unnamed-chunk-38-1.png" style="display: block; margin: auto;" />
 
 3. Find peaks above a significance threshold.
 
@@ -1496,7 +1510,7 @@ plot_coefCC(x            = coef4,
             main         = "Log-Transformed Pre-dose micronucleated reticulocytes")
 ```
 
-<img src="fig/do_qtl_mapping-rendered-unnamed-chunk-39-1.png" style="display: block; margin: auto;" />
+<img src="fig/do_qtl_mapping-rendered-unnamed-chunk-40-1.png" style="display: block; margin: auto;" />
 
 5. Perform association mapping in the QTL interval for the highest peak.
 
