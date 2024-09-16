@@ -930,7 +930,7 @@ summary(perms)
 ``` output
 LOD thresholds (100 permutations)
      log_mnret
-0.05      7.18
+0.05      7.38
 ```
 
 Note that this summary function returns the 95th percentile value of the LOD
@@ -1095,7 +1095,7 @@ downloaded this during Setup. It is available from
 [figshare](https://figshare.com/ndownloader/files/40157572), but the file is 
 10 GB, so it may take too long to download right now.
 
-![](./figures/DO.impute.founders.sm.png)
+![SNP Imputation](./figures/DO.impute.founders.sm.png){alt="Fiugure showing haplotypes being used to impute founder SNPs onto DO genomes.",width=75%}
 
 Association mapping involves imputing the founder SNPs onto each DO genome and 
 fitting the mapping model at each SNP. At each marker, we fit the following model:  
@@ -1115,23 +1115,31 @@ $\epsilon_i$ is the residual error for mouse $i$.
 We can call [scan1snps](https://github.com/rqtl/qtl2/blob/master/R/scan1snps.R) 
 to perform association mapping in the QTL interval on Chr 10. We first create 
 variables for the chromosome and support interval where we are mapping. We then 
-create a function to get the SNPs from the founder SNP database. Note that it is
-important to use the `keep_all_snps = TRUE` in order to return all SNPs.
+create a function to get the SNPs from the founder SNP database.
 
-<!-- DMG: Not sure how to do association mapping with a 10 GB file. We might 
-have to do a static figure. -->
+::::::::::::::::::::::::::::::::::::: callout
 
-```{reval=FALSE}
+It is important to use the `keep_all_snps = TRUE` in order to return all SNPs.
+
+:::::::::::::::::::::::::::::::::::::
+
+
+
+``` r
 chr   <- 10
 start <- 30
 end   <- 36
-query_func <- create_variant_query_func("./data/cc_variants.sqlite")
+
+# Create function to query founder SNP database.
+query_snps  <- create_variant_query_func(dbfile   = "./data/fv.2021.snps.db3",
+                                      id_field = "variants_id")
+
 assoc      <- scan1snps(genoprobs  = probs[,chr], 
                         map        = map, 
                         pheno      = pheno_100[,index,drop = FALSE], 
                         kinship    = K, 
                         addcovar   = addcovar, 
-                        query_func = query_func, 
+                        query_func = query_snps,
                         chr        = chr, 
                         start      = start, 
                         end        = end, 
@@ -1139,92 +1147,375 @@ assoc      <- scan1snps(genoprobs  = probs[,chr],
 ```
 
 
-<!-- DMG: STOPPED HERE -->
+The `assoc` object is a list containing two objects: the LOD scores for each 
+unique SNP and a `snpinfo` object that maps the LOD scores to each SNP. To plot 
+the association mapping, we need to provide both objects to the [plot_snpasso](https://github.com/rqtl/qtl2/blob/master/R/plot_snpasso.R) 
+function.
+
+
+``` r
+#png('./figures/bm_mnret_assoc_fig1.png', width = 2000, height = 2000, res = 256)
+plot_snpasso(scan1output = assoc$lod, 
+             snpinfo     = assoc$snpinfo, 
+             main        = "Proportion of Micro-nucleated Bone Marrow Reticulocytes")
+#dev.off()
+```
+
+![Bone Marrow MN-RET Association Mapping](./figures/bm_mnret_assoc_fig1.png){alt="Plot showing LOD of each SNP in QTL interval",width=100%}
+
+
+This plot shows the LOD score for each SNP in the QTL interval. The SNPs occur 
+in "shelves" because all of the SNPs in a haplotype block have the same founder 
+strain pattern. The SNPs with the highest LOD scores are the ones for which 
+CAST/EiJ contributes the alternate allele.
+
+You might naturally ask what genes are under this QTL peak. We will query the 
+SNP/gens database for the genes in the interval. As before, we will create a
+function to query the genes in a specific interval of the genome. 
+
+
+``` r
+# Create function to query gene database.
+query_genes <- create_gene_query_func(dbfile      = "./data/fv.2021.snps.db3",
+                                   chr_field   = "chromosome", 
+                                   name_field  = "symbol",
+                                   start_field = "start_position", 
+                                   stop_field  = "end_position")
+
+genes <- query_genes(chr, start, end)
+```
+
+``` error
+Error in query_genes(chr, start, end): File ./data/fv.2021.snps.db3 doesn't exist
+```
+
+``` r
+head(genes)
+```
+
+``` error
+Error in eval(expr, envir, enclos): object 'genes' not found
+```
+
+The `genes` object contains annotation information for each gene in the interval.
+
+Next, we will create a plot with two panels: one containing the association 
+mapping LOD scores and one containing the genes in the QTL interval. We do this 
+by passing in the `genes` argument to 
+[plot_snpasso](https://github.com/rqtl/qtl2/blob/master/R/plot_snpasso.R). We 
+can also adjust the proportion of the plot allocated for SNPs (on the top) and 
+genes (on the bottom) using the 'top_panel_prop' argument.
 
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: instructor
 
-Inline instructor notes can help inform instructors of timing challenges
-associated with the lessons. They appear in the "Instructor View"
+Note that you have to add the "genes", "colors", and "top_panel_prop" arguments.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
+
+``` r
+#png('./figures/bm_mnret_assoc_fig2.png', width = 2000, height = 2000, res = 256)
+plot_snpasso(scan1output = assoc$lod, 
+             snpinfo     = assoc$snpinfo, 
+             main        = "Proportion of Micro-nucleated Bone Marrow Reticulocytes", 
+             genes       = genes,
+             colors      = "black",
+             top_panel_prop = 0.25)
+#dev.off()
+```
+
+![Bone Marrow MN-RET Association Mapping](./figures/bm_mnret_assoc_fig2.png){alt="Plot showing LOD of each SNP in QTL interval with genes below",width=100%}
+
+Now that we have the genes in this interval, we would like to know which 
+founders have the minor allele for the SNPs with the highest LOD scores. To do
+this, we will highlight SNPs that are withing a 1 LOD drop of the highest LOD
+and we will add an argument to show which founder contributes the minor allele
+at the highlighted SNPs.
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: instructor
+
+Note that you have to change the "top_panel_prop" argument to "panel_prop" and
+add the "drop_hilit", "col_hilit", and "sdp_panel" arguments.
+
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+
+``` r
+#png('./figures/bm_mnret_assoc_fig3.png', width = 2000, height = 2000, res = 256)
+plot_snpasso(scan1output = assoc$lod, 
+             snpinfo     = assoc$snpinfo, 
+             main        = "Proportion of Micro-nucleated Bone Marrow Reticulocytes", 
+             genes       = genes,
+             colors      = "black",
+             panel_prop = c(0.25, 0.25, 0.5),
+             drop_hilit  = 1.0,
+             col_hilit   = 'red',
+             sdp_panel   = TRUE)
+#dev.off()
+```
+
+![Bone Marrow MN-RET Association Mapping](./figures/bm_mnret_assoc_fig3.png){alt="Plot showing LOD of each SNP in QTL interval with genes below and strain distribution pattern above",width=100%}
+
+### Searching for Candidate Genes
+
+One strategy for finding genes related to a phenotype is to search for genes 
+with expression QTL (eQTL) in the same location. Ideally, we would have liver 
+and bone marrow gene expression data in the DO mice from this experiment. 
+Unfortunately, we did not collect this data. However, we have liver gene 
+expression for a separate set of untreated DO mice 
+[Liver eQTL Viewer](https://churchilllab.jax.org/qtlviewer/svenson/DOHFD). We 
+searched for genes in the QTL interval that had an eQTL in the same location. 
+Then, we looked at the pattern of founder effects to see if CAST stood out. We 
+found two genes that met these criteria.
+
+![Sult3a1/Sult3a2 Liver eQTL](./figures/French.et.al.Figure3.png){Figure showing LOD plots of Sult3a1 & 2 and CAST-specific haplotype effects}
+
+The plot above shows the genome scane for two genes: *Sult3a1* and 
+*Gm4794*. *Gm4794* has been renamed to *Sult3a2*. As you can see, both *Sult3a1*
+*Sult3a2* have eQTL in the same location at the MN-RET QTL on Chr 10. Mice 
+carrying the CAST allele (in green) express these genes more highly. *Sult3a1* 
+is a [sulfotransferase](https://en.wikipedia.org/wiki/Sulfotransferase) that 
+may be involved in adding a sulfate group to phenol, one of the metabolites of 
+benzene. 
+
 ::::::::::::::::::::::::::::::::::::: challenge 
 
-## Challenge 1: Can you do it?
+## Challenge 11: Look for Sult3a1 & Sult3a2 QTL in DO bone expression
 
-What is the output of this command?
-
-```r
-paste("This", "new", "lesson", "looks", "good")
-```
+Go to the [DO Bone eQTL Viewer](https://churchilllab.jax.org/qtlviewer/DO/bone),
+type in *Sult3a1* and click on the search button. Then search on *Sult3a2*.
 
 :::::::::::::::::::::::: solution 
 
 ## Output
  
-```output
-[1] "This new lesson looks good"
-```
+Neither *Sult3a1* or *Sult3a2* has an eQTL in the DO bone marrow data set.
 
-:::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::
 
+Next, we will look at the relationship between *Sult3a1* and *Sult3a2*. Go to the 
+Ensembl web page for 
+[Sult3a2](https://useast.ensembl.org/Mus_musculus/Gene/Summary?db=core;g=ENSMUSG00000090298;r=10:33642420-33662700).
+In the menu on the left, click on the "Gene Tree (image)" link.
 
-## Challenge 2: how do you nest solutions within challenge blocks?
+![Ensembl gene tree of Sult3a1 & Sult3a2](./figures/Ensembl_Mouse_Sult3a1_Sult3a2.png){Figure showing that Sult3a1 & 2 are paralogs}
+
+As you can see, *Sult3a2* is a paralog of *Sult3a1* and hence both 
+genes are sulfotransferases. These genes encode enzymes that attach a sulfate 
+group to other compounds.
+
+::::::::::::::::::::::::::::::::::::: challenge 
+
+## Challenge 12: Look for structural variants near Sult3a1
+
+Go to the [Ensembl website](https://useast.ensembl.org/index.html) and select
+"Mouse" from the species dropdown. Then type "10:33300000-33800000" into the
+search box and press "Go". Scroll down to the detailed view and look for 
+structural variants in this region.
 
 :::::::::::::::::::::::: solution 
 
-You can add a line with at least three colons and a `solution` tag.
+## Output
 
-:::::::::::::::::::::::::::::::::
-::::::::::::::::::::::::::::::::::::::::::::::::
+You should see a plot similar to the one below. 
 
-## Figures
+![Ensembl Structural Variants](./figures/Ensembl_SV_Chr10.png){alt="Ensembl viewer showing genes and structural variants under that chromosome 10 QTL peak",width=100%}
 
-You can also include figures generated from R Markdown:
+:::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::
+
+
+![Ensembl Structural Variants](./figures/Ensembl_SV_Chr10.png){alt="Ensembl viewer showing genes and structural variants under that chromosome 10 QTL peak",width=100%}
+
+
+In order to visualize the size of the copy number gain, we queried the 
+Mouse Genomes Project [alignment files](https://www.mousegenomes.org/mouse-strains-sequenced/) 
+for the eight founders. We piled up the reads at each base (which is beyond the 
+scope of this tutorial) and made the figure below.
+
+![DO Founder BAM file pileups](./figures/French.et.al.Sup.Figure3.png){alt="Figure showing CAST with a duplication at the Sult3a1/2 locus.",width=100%}
+
+As you can see, there appears to be a duplicatation in the CAST founders that 
+covers four genes: *Clvs2*, *Gm15939*, *Sult3a1* and *Sult3a2*. *Clvs2* is 
+expressed in neurons and *Gm15939* is a predicted gene that may not produce a 
+transcript.
+
+Hence, we have three pieces of evidence that narrows our candidate gene list to 
+*Sult3a1* and *Sult3a2*:
+
+1. Both genes have a liver eQTL in the same location as the micronucleated 
+reticulocytes QTL.
+2. Among genes in the micronucleated reticulocytes QTL interval, only *Sult3a1*
+and *Sult3a2* have differential expression of the CAST allele in the liver.
+3. There is a copy number gain of these two genes in CAST.
+
+Sulfation is a prominent detoxification mechanism for benzene as well. The 
+diagram below shows the metabolism pathway for benzene 
+[(Monks, T. J., et al. (2010). Chem Biol Interact 184(1-2): 201-206.)](http://europepmc.org/articles/PMC4414400) 
+Hydroquinone, phenol and catechol are all sulfated and excreted from the body.
+
+![Benezene metabolism pathways](./figures/Monks_ChemBiolInter_2010_Fig1.jpg){alt="Figure showing benezene metabolism pathways",width=100%}
+
+This analysis has led us to the following hypothesis. Inhaled benzene is 
+absorbed by the lungs into the bloodstream and transported to the liver. There,
+it is metabolized, and some metabolites are transported to the bone marrow. One 
+class of genes that is involved in toxicant metabolism are sulfotransferases. [<i>Sult3a1</i>](http://www.informatics.jax.org/marker/MGI:1931469) is a phase 
+II enzyme that conjugates compounds (such as phenol, which is a metabolite of 
+benzene) with a sulfate group before transport into the bile. It is possible 
+that a high level of *Sult3a1* expression could remove benzene by-products
+and be protective. Our hypothesis is that the copy number gain in the CAST 
+allele increases liver gene expression of *Sult3a1* and *Sult3a2*. High liver 
+expression of these genes allows mice containing the CAST allele to rapidly 
+conjugate harmful benzene metabolites and excrete them from the body before 
+they can reach the bone marrow and cause DNA damage. Further experimental 
+validation is required, but this is a plausible hypothesis.
+
+![Benzene metabolism hypothesis](./figures/benzene_hypothesis.png){alt="Figure showing mice carrying the CAST allele being protected from benezene toxicity",width=100%}
+
+We hope that this tutorial has shown you how the DO can be used to map QTL and 
+use the founder effects and bioinformatics resources to narrow down the 
+candidate gene list. Here, we made used of external gene expression databases 
+and the founder sequence data to build a case for a pair of genes.
+
+
+::::::::::::::::::::::::::::::::::::: challenge 
+
+## Challenge 13: Map another trait.
+
+1. Make a histogram of the column `pre.prop.mn.ret` in `pheno`. Does it look 
+like it should be log transformed? If so, add a column to `pheno` that contains 
+the log of `pre.prop.mn.ret`.  
+2. Perform a genome scan *using all samples* on the column called 
+`pre.prop.mn.ret`. Since you're using all samples, the scan will take longer.
+You will also need to add the benezene concentration to the covariates.
+(Hint: set `index` to the column index in `pheno`.)  
+3. Which chromosome has the highest peak? Use `find_peaks` to get the location 
+and support interval for the highest peak.  
+4. Calculate and plot the BLUPs for the chromosome with the highest peak. (This 
+may take a few minutes.) Which founder contributes an allele that makes MN-RET
+values higher?
+5. Perform association mapping in the support interval for the QTL peak, 
+plot the results and plot the genes beneath the association mapping plot.  
+
+:::::::::::::::::::::::: solution 
+
+## Output
+
+1. Plot the distribution of 
 
 
 ``` r
-pie(
-  c(Sky = 78, "Sunny side of pyramid" = 17, "Shady side of pyramid" = 5), 
-  init.angle = 315, 
-  col = c("deepskyblue", "yellow", "yellow3"), 
-  border = FALSE
-)
+hist(pheno$pre.prop.mn.ret)
 ```
 
-<div class="figure" style="text-align: center">
-<img src="fig/do_qtl_mapping-rendered-pyramid-1.png" alt="pie chart illusion of a pyramid"  />
-<p class="caption">Sun arise each and every morning</p>
-</div>
+<img src="fig/do_qtl_mapping-rendered-unnamed-chunk-32-1.png" style="display: block; margin: auto;" />
 
-Or you can use standard markdown for static figures with the following syntax:
-
-`![optional caption that appears below the figure](figure url){alt='alt text for
-accessibility purposes'}`
-
-![You belong in The Carpentries!](https://raw.githubusercontent.com/carpentries/logo/master/Badge_Carpentries.svg){alt='Blue Carpentries hex person logo with no text.'}
-
-::::::::::::::::::::::::::::::::::::: callout
-
-Callout sections can highlight information.
-
-They are sometimes used to emphasise particularly important points
-but are also used in some lessons to present "asides": 
-content that is not central to the narrative of the lesson,
-e.g. by providing the answer to a commonly-asked question.
-
-::::::::::::::::::::::::::::::::::::::::::::::::
+Log transform the pre-dose proportion of MN-RETs.
 
 
-## Math
+``` r
+pheno$log_pre_prop_mnret <- log(pheno$pre.prop.mn.ret)
+```
 
-One of our episodes contains $\LaTeX$ equations when describing how to create
-dynamic reports with {knitr}, so we now use mathjax to describe this:
 
-`$\alpha = \dfrac{1}{(1 - \beta)^2}$` becomes: $\alpha = \dfrac{1}{(1 - \beta)^2}$
+2. Set the mapping index equal to the `pre.prop.mn.ret` column.
 
-Cool, right?
 
+``` r
+index <- which(colnames(pheno) == "log_pre_prop_mnret")
+```
+
+Create new covariates which include study and benzene concentration.
+
+
+``` r
+addcovar2 <- model.matrix(~study + conc, data = pheno)[,-1]
+```
+
+
+``` r
+lod_pre <- scan1(genoprobs = probs, 
+                 pheno     = pheno[,index, drop = FALSE], 
+                 kinship   = K, 
+                 addcovar  = addcovar2)
+plot_scan1(x    = lod_pre, 
+           map  = map, 
+           main = "Log-Transformed Pre-dose micronucleated reticulocytes")
+```
+
+<img src="fig/do_qtl_mapping-rendered-unnamed-chunk-36-1.png" style="display: block; margin: auto;" />
+
+3. Find peaks above a significance threshold.
+
+
+``` r
+find_peaks(lod_pre, map, threshold = 8, prob = 0.95)
+```
+
+``` output
+  lodindex          lodcolumn chr       pos       lod     ci_lo     ci_hi
+1        1 log_pre_prop_mnret   4 132.77875 13.145968 132.77875 134.27938
+2        1 log_pre_prop_mnret  12  75.45433  8.404242  74.14949  77.30552
+```
+
+4. Calculate and plot BLUPs for the highest peak.
+
+
+``` r
+chr   <- 4
+coef4 <- scan1blup(genoprobs = probs[,chr], 
+                   pheno     = pheno[,index, drop = FALSE], 
+                   kinship   = K[[chr]], 
+                   addcovar  = addcovar2)
+plot_coefCC(x            = coef4, 
+            map          = map, 
+            scan1_output = lod_pre, 
+            legend       = "topleft",
+            main         = "Log-Transformed Pre-dose micronucleated reticulocytes")
+```
+
+<img src="fig/do_qtl_mapping-rendered-unnamed-chunk-38-1.png" style="display: block; margin: auto;" />
+
+5. Perform association mapping in the QTL interval for the highest peak.
+
+
+``` r
+start  <- 132.8
+end    <- 134.3
+assoc4 <- scan1snps(genoprobs  = probs[,chr], 
+                    map        = map, 
+                    pheno      = pheno[,index,drop = FALSE], 
+                    kinship    = K, 
+                    addcovar   = addcovar2, 
+                    query_func = query_snps, 
+                    chr        = chr,
+                    start      = start, 
+                    end        = end, 
+                    keep_all_snps = TRUE)
+
+genes <- query_genes(chr, start, end)
+```
+
+
+``` r
+#png('./figures/pre_mnret_assoc.png', width = 2000, height = 2000, res = 256)
+plot_snpasso(scan1output = assoc4$lod, 
+             snpinfo     = assoc4$snpinfo, 
+             main        = "Log-Transformed Pre-dose micronucleated reticulocytes", 
+             genes       = genes,
+             colors      = "black",
+             panel_prop = c(0.25, 0.25, 0.5),
+             drop_hilit  = 1.0,
+             col_hilit   = 'red',
+             sdp_panel   = TRUE)
+#dev.off()
+```
+
+[Pre-dose MN-RET Association Mapping](./figures/pre_mnret_assoc.png){alt="Figure showing pre-dose MN-RET association mapping with WSB carrying the alternate allele",width=100%}
+
+:::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::
 
 ```r
 sessionInfo()
@@ -1232,10 +1523,15 @@ sessionInfo()
 
 ::::::::::::::::::::::::::::::::::::: keypoints 
 
-- Use `.md` files for episodes when you want static content
-- Use `.Rmd` files for episodes when you need to generate output
-- Run `sandpaper::check_lesson()` to identify any issues with your lesson
-- Run `sandpaper::build_lesson()` to preview your lesson locally
+- There are generally five steps to QTL mapping in DO mice: 
+    - map the trait,
+    - perform permutations,
+    - find significant peaks,
+    - calculate founder allele effects at the QTL peak,
+    - perform association mapping to narrow the gene candidates.
+- You may need to bring in outside resources to help narrow your candidate
+gene list.
+- You will need the 10 GB SNP database to perform association mapping.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
