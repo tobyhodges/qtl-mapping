@@ -104,6 +104,15 @@ Github. The `*.Rdata` file is over 200 Mb and Github has a file size limit of
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
+<!--DMG: Checking what the working directory is when the lesson builds.  -->
+
+```{r}
+getwd()
+```
+
+
+
+
 ```{r include = FALSE}
 # We have to build the probs object for the Workbench site. The students can
 # load it in directly.
@@ -970,11 +979,11 @@ CAST/EiJ contributes the alternate allele.
 
 You might naturally ask what genes are under this QTL peak. We will query the 
 SNP/gens database for the genes in the interval. As before, we will create a
-function to query the genes in a specific interval of the genome. 
+function to query the genes in a specific interval of the genome.
 
-```{r}
+```{r eval=FALSE}
 # Create function to query gene database.
-query_genes <- create_gene_query_func(dbfile      = "./data/fv.2021.snps.db3",
+query_genes <- create_gene_query_func(dbfile   = "./data/fv.2021.snps.db3",
                                    chr_field   = "chromosome", 
                                    name_field  = "symbol",
                                    start_field = "start_position", 
@@ -982,6 +991,24 @@ query_genes <- create_gene_query_func(dbfile      = "./data/fv.2021.snps.db3",
 
 genes <- query_genes(chr, start, end)
 head(genes)
+```
+
+
+````output
+          ensembl_id ensembl_version    Name                     name chromosome start_position end_position strand    start
+1 ENSMUSG00000000295              14   Hddc2   HD domain containing 2         10       31189379     31204200      1 31.18938
+2 ENSMUSG00000000296               9 Tpd52l1 tumor protein D52-like 1         10       31208372     31321954     -1 31.20837
+3 ENSMUSG00000019779              16     Frk       fyn-related kinase         10       34359395     34487274      1 34.35939
+4 ENSMUSG00000019782              11   Rwdd1  RWD domain containing 1         10       33872551     33895620     -1 33.87255
+5 ENSMUSG00000019785              15   Clvs2               clavesin 2         10       33388282     33500765     -1 33.38828
+6 ENSMUSG00000019787              10    Trdn                  triadin         10       32956550     33352705      1 32.95655
+      stop
+1 31.20420
+2 31.32195
+3 34.48727
+4 33.89562
+5 33.50077
+6 33.35271
 ```
 
 The `genes` object contains annotation information for each gene in the interval.
@@ -1281,7 +1308,7 @@ plot_snpasso(scan1output = assoc4$lod,
 :::::::::::::::::::::::
 :::::::::::::::::::::::::::::::::::::
 
-```r
+```{r}
 sessionInfo()
 ```
 
