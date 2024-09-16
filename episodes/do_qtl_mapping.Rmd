@@ -111,6 +111,10 @@ getwd()
 ```
 
 
+```{r}
+dir()
+```
+
 
 
 ```{r include = FALSE}
