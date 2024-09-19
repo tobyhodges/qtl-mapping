@@ -875,7 +875,7 @@ summary(perms)
 ``` output
 LOD thresholds (100 permutations)
      log_mnret
-0.05      7.01
+0.05      7.15
 ```
 
 Note that this summary function returns the 95th percentile value of the LOD
@@ -1077,7 +1077,7 @@ end   <- 36
 
 # Create function to query founder SNP database.
 query_snps  <- create_variant_query_func(dbfile   = "./data/fv.2021.snps.db3",
-                                      id_field = "variants_id")
+                                         id_field = "variants_id")
 
 assoc      <- scan1snps(genoprobs  = probs[,chr], 
                         map        = map, 
@@ -1121,11 +1121,11 @@ function to query the genes in a specific interval of the genome.
 
 ``` r
 # Create function to query gene database.
-query_genes <- create_gene_query_func(dbfile   = "./data/fv.2021.snps.db3",
-                                   chr_field   = "chromosome", 
-                                   name_field  = "symbol",
-                                   start_field = "start_position", 
-                                   stop_field  = "end_position")
+query_genes <- create_gene_query_func(dbfile      = "./data/fv.2021.snps.db3",
+                                      chr_field   = "chromosome", 
+                                      name_field  = "symbol",
+                                      start_field = "start_position", 
+                                      stop_field  = "end_position")
 
 genes <- query_genes(chr, start, end)
 head(genes)
