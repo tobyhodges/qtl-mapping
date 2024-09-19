@@ -221,11 +221,6 @@ ggplot(data = pheno, mapping = aes(prop.bm.mn.ret)) +
 `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 ```
 
-``` warning
-Warning: Removed 29 rows containing non-finite outside the scale range
-(`stat_bin()`).
-```
-
 <img src="fig/do_qtl_mapping-rendered-unnamed-chunk-6-1.png" style="display: block; margin: auto;" />
 
 The bone marrow MN-RET values do not look normally distributed.
@@ -256,11 +251,6 @@ pheno |>
 
 ``` output
 `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
-```
-
-``` warning
-Warning: Removed 29 rows containing non-finite outside the scale range
-(`stat_bin()`).
 ```
 
 <img src="fig/do_qtl_mapping-rendered-unnamed-chunk-7-1.png" style="display: block; margin: auto;" />
@@ -318,16 +308,6 @@ pheno |>
     labs(title = "Bone Marrow MN-RET by Study Cohort") +
     theme(text = element_text(size = 20), 
           legend.position = "none")
-```
-
-``` warning
-Warning: Removed 29 rows containing non-finite outside the scale range
-(`stat_ydensity()`).
-```
-
-``` warning
-Warning: Removed 29 rows containing missing values or values outside the scale range
-(`geom_point()`).
 ```
 
 <img src="fig/do_qtl_mapping-rendered-unnamed-chunk-9-1.png" style="display: block; margin: auto;" />
@@ -895,7 +875,7 @@ summary(perms)
 ``` output
 LOD thresholds (100 permutations)
      log_mnret
-0.05      6.92
+0.05      7.01
 ```
 
 Note that this summary function returns the 95th percentile value of the LOD
@@ -1497,7 +1477,7 @@ sessionInfo()
 ``` output
 R version 4.4.1 (2024-06-14)
 Platform: x86_64-pc-linux-gnu
-Running under: Ubuntu 22.04.4 LTS
+Running under: Ubuntu 22.04.5 LTS
 
 Matrix products: default
 BLAS:   /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.10.0 
