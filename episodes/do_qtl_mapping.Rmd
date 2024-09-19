@@ -83,7 +83,7 @@ The primary library that we will use is [qtl2](https://github.com/kbroman/qtl2).
 You should have `qtl2` installed from the Setup that you performed before the
 workshop.
 
-```{r}
+```{r warning=FALSE}
 suppressPackageStartupMessages(library(tidyverse))
 suppressPackageStartupMessages(library(ggbeeswarm))
 suppressPackageStartupMessages(library(qtl2))
@@ -104,7 +104,7 @@ Github. The `*.Rdata` file is over 200 Mb and Github has a file size limit of
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-```{r include = FALSE}
+```{r include=FALSE}
 # We have to build the probs object for the Workbench site. The students can
 # load it in directly.
 probs_files = dir('./data', pattern = '^probs_chr', full.names = TRUE)
@@ -216,7 +216,7 @@ distributed.
 You can look at the number of observations in the Environment tab or you can
 get the number of rows in `pheno` in the Console.
  
-```{r}
+```{r warning=FALSE}
 ggplot(data = pheno, mapping = aes(prop.bm.mn.ret)) +
   geom_histogram() +
   labs(title = "Histogram of Bone Marrow MN-RETs") +
@@ -239,7 +239,7 @@ it is normally distributed.
 You can look at the number of observations in the Environment tab or you can
 get the number of rows in `pheno` in the Console.
  
-```{r}
+```{r warning=FALSE}
 pheno |>
   mutate(log_mnret = log(prop.bm.mn.ret)) |>
   ggplot(mapping = aes(log_mnret)) +
@@ -287,7 +287,7 @@ geom, log scale, and facet wrap lines in class.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-```{r fig.width=8}
+```{r fig.width=10,fig.height=8,warning=FALSE}
 pheno |>
   mutate(conc = factor(conc)) |>
   ggplot(mapping = aes(conc, prop.bm.mn.ret * 1000, color = conc)) +
