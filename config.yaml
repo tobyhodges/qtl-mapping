@@ -75,6 +75,9 @@ episodes:
 - find-lod-peaks.Rmd          
 - calc-kinship.Rmd            
 - perform-genome-scan-lmm.Rmd
+- perform-genome-scan-bin.Rmd
+- est-qtl-effects.Rmd
+- snp-assoc.Rmd
 - do_qtl_mapping.Rmd
 
 # Information for Learners
