@@ -1,12 +1,12 @@
 ---
-title: "SNP Association Mapping"
+title: "SNP association mapping"
 teaching: 30
 exercises: 30
 ---
 
 :::::::::::::::::::::::::::::::::::::: questions 
 
-- How do I identify SNPs in a QTL?
+- "How do I identify SNPs in a QTL?"
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -21,12 +21,10 @@ exercises: 30
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
-```{r}
-library(qtl2)
-```
 
-For multi-parent crosses, it can be useful to collapse the genotype or allele probabilities according to the founder genotypes of the various
-SNPs in the region of a QTL.
+For multi-parent crosses, it can be useful to collapse the genotype or allele 
+probabilities according to the founder genotypes of the various SNPs in the 
+region of a QTL.
 
 ### QTL analysis in Diversity Outbred mice
 
@@ -40,12 +38,11 @@ and [Gatti et al. (2014)](https://www.ncbi.nlm.nih.gov/pubmed/25237114).
 We'll consider a subset of the data from
 [Recla et al. (2014)](https://www.ncbi.nlm.nih.gov/pubmed/24700285), available 
 as part of the
-[qtl2data github repository](https://github.com/rqtl/qtl2data). (The
-full data are in
-[`DO_Recla`](https://github.com/rqtl/qtl2data/tree/master/DO_Recla); the directory
-[`DOex`](https://github.com/rqtl/qtl2data/tree/master/DOex) contains a reduced 
-set, with just three chromosomes, one phenotype (`OF_immobile_pct`, percent 
-immobile in the open field test), and a reduced set of markers.
+[qtl2data github repository](https://github.com/rqtl/qtl2data). (The full data 
+are in [`DO_Recla`](https://github.com/rqtl/qtl2data/tree/master/DO_Recla); the 
+directory [`DOex`](https://github.com/rqtl/qtl2data/tree/master/DOex) contains a 
+reduced set, with just three chromosomes, one phenotype (`OF_immobile_pct`, 
+percent immobile in the open field test), and a reduced set of markers.
 
 You can download the data from a single zip file, as follows:
 
@@ -59,8 +56,7 @@ We first calculate genotype probabilities and convert them to allele
 probabilities. We'll just use marker locations and not insert any pseudomarkers.
 
 ```{r DOex_calc_genoprob}
-pr  <- calc_genoprob(cross      = DOex, 
-                     error_prob = 0.002)
+pr <- calc_genoprob(DOex, error_prob=0.002)
 apr <- genoprob_to_alleleprob(pr)
 ```
 
@@ -68,15 +64,14 @@ We calculate kinship matrices (using the "LOCO" method, though with the caveat
 that here we are only considering genotypes on three chromosomes).
 
 ```{r DOex_calc_kinship}
-k <- calc_kinship(probs = apr, 
-                  type  = "loco")
+k <- calc_kinship(apr, "loco")
 ```
 
 We create a numeric covariate for sex; be sure to include the individual IDs as 
 names.
 
 ```{r DOex_create_sex_covar}
-sex        <- (DOex$covar$Sex == "male") * 1
+sex <- (DOex$covar$Sex == "male")*1
 names(sex) <- rownames(DOex$covar)
 ```
 
@@ -84,100 +79,86 @@ Note that you can create the vector and assign the names in one step using the
 basic R function setNames().
 
 ```{r DOex_set_names}
-sex <- setNames( (DOex$covar$Sex == "male") * 1, rownames(DOex$covar) )
+sex <- setNames( (DOex$covar$Sex == "male")*1, rownames(DOex$covar) )
 ```
 
 We perform a genome scan with a linear mixed model (adjusting for a residual 
 polygenic effect), with sex as an additive covariate.
 
 ```{r DOex_scan1_pg}
-out <- scan1(genoprobs = apr, 
-             pheno     = DOex$pheno, 
-             kinship   = k, 
-             addcovar  = sex)
+out <- scan1(apr, DOex$pheno, k, sex)
 ```
 
 Here's a plot of the results.
 
 ```{r plot_DOex_scan}
-par(mar = c(4.1, 4.1, 0.6, 0.6))
-plot_scan1(out, map = DOex$gmap)
+par(mar=c(4.1, 4.1, 0.6, 0.6))
+plot(out, DOex$gmap)
 ```
 
-There's a strong peak on chromosome 2. Let's look at the QTL effects. We estimate them with `scan1coef()`. We need to subset the allele probabilities and the list of kinship matrices.
+There's a strong peak on chromosome 2. Let's look at the QTL effects. We 
+estimate them with `scan1coef()`. We need to subset the allele probabilities and 
+the list of kinship matrices.
 
 ```{r DOex_effects_c2}
-chr     <- "2"
-coef_c2 <- scan1coef(genoprobs = apr[,chr], 
-                     pheno     = DOex$pheno, 
-                     kinship   = k[[chr]], 
-                     addcovar  = sex)
+coef_c2 <- scan1coef(apr[,"2"], DOex$pheno, k[["2"]], sex)
 ```
 
-For the DO, with 8 QTL alleles, we can use the function `plot_coefCC` in the [R/qtl2plot](https://github.com/rqtl/qtl2plot) package, which plots the 8 allele
+For the DO, with 8 QTL alleles, we can use the function `plot_coefCC` in the [R/qtl2plot](https://github.com/rqtl/qtl2plot) package, which plots the 8 allele 
 effects in the "official" Collaborative Cross (CC) colors. (Well, actually 
-_slightly_ modified colors, because I think the official
-colors are kind of ugly.) The strong locus seems to be mostly
-due to the NZO allele. Note that `CCcolors` is a vector of colors included in 
-the qtl2plot package; there's also a `CCorigcolors` object with the 
-_official_ colors.
+_slightly_ modified colors, because I think the official colors are kind of 
+ugly.) The strong locus seems to be mostly due to the NZO allele. Note that 
+`CCcolors` is a vector of colors included in the qtl2plot package; there's also 
+a `CCorigcolors` object with the _official_ colors.
 
 ```{r plot_DOex_effects}
-par(mar = c(4.1, 4.1, 0.6, 0.6))
-plot_coefCC(coef_c2, 
-            map     = DOex$gmap["2"], 
-            bgcolor = "gray95", 
-            legend  = "bottomleft")
+par(mar=c(4.1, 4.1, 0.6, 0.6))
+plot_coefCC(coef_c2, DOex$gmap["2"], bgcolor="gray95", legend="bottomleft")
 ```
 
 If you provide `plot_coefCC()` with the genome scan output, it will display the 
 LOD curve below the coefficient estimates.
 
 ```{r plot_DOex_lod_curve}
-par(mar = c(4.1, 4.1, 0.6, 0.6))
-plot_coefCC(coef_c2, 
-            map          = DOex$gmap["2"], 
-            scan1_output = out, 
-            bgcolor      = "gray95", 
-            legend       = "bottomleft")
+par(mar=c(4.1, 4.1, 0.6, 0.6))
+plot_coefCC(coef_c2, DOex$gmap["2"], scan1_output=out, bgcolor="gray95", legend="bottomleft")
 ```
 
 ### Connecting to SNP and gene databases
-
 To perform SNP association analysis in the region of a QTL, we’ll need to grab 
 data on all of the SNPs in the region, including their genotypes in the eight 
 founder strains for the CC and DO populations. As a related task, we’ll also 
 want to identify the genes in the region.
 
 We want R/qtl2 to permit different ways of storing this information. For the CC 
-and DO populations, we’ve prepared SQLite database files for the variants in the
-CC founders and for the MGI mouse gene annotations. But others might wish to use
+and DO populations, we’ve prepared SQLite database files for the variants in the 
+CC founders and for the MGI mouse gene annotations. But others might wish to use 
 a different kind of database, or may wish to query an online database.
 
 We provide a template for how to use R/qtl2 to connect to SNP and gene 
-databases, with the functions
-[create_variant_query_func()](https://github.com/kbroman/qtl2/blob/main/R/create_variant_query_func.R) 
-and 
-[create_gene_query_func()](https://github.com/kbroman/qtl2/blob/main/R/create_gene_query_func.R). 
-Each returns a function for querying variant and 
+databases, with the functions `create_variant_query_func()` and 
+`create_gene_query_func()`. Each returns a function for querying variant and 
 gene databases, respectively. The query functions that are returned take just 
 three arguments (chr, start, end end), and themselves return a data frame of 
 variants on the one hand and genes on the other.
 
-During [setup](https://smcclatchy.github.io/qtl-mapping/setup/) you would have 
+During [setup](https://smcclatchy.github.io/mapping/setup/) you would have 
 downloaded the SQLite databases from Figshare and placed these in your `data` 
 directory:
 
-+ [SQLite database of variants in Diversity Outbred founder mouse strains (v3)](https://figshare.com/ndownloader/files/40157572): SNP, indel, and 
-structural variants in the Diversity Outbred founders. This database also
-contains gene positions in GRCm39 coordinates (10 GB).
++ [SQLite database of variants in Collaborative Cross founder mouse strains (v3)](https://figshare.com/articles/SQLite_database_of_variants_in_Collaborative_Cross_founder_mouse_strains/5280229/3): SNP, indel, and structural variants in the 
+Collaborative Cross founders (3.87 GB)
++ [SQLite database with mouse gene annotations from Mouse Genome Informatics (v6)](https://figshare.com/articles/dataset/SQLite_database_with_mouse_gene_annotations_from_Mouse_Genome_Informatics_MGI_at_The_Jackson_Laboratory/5280238): full set of mouse 
+gene annotations from build 38 mm10 (529.89 MB)
++ [SQLite database with MGI mouse gene annotations from Mouse Genome Informatics (v7)](https://figshare.com/articles/dataset/SQLite_database_with_MGI_mouse_gene_annotations_from_Mouse_Genome_Informatics_MGI_at_The_Jackson_Laboratory/5286019): like the 
+previous, but including only non-duplicate gene records sourced from MGI 
+(11.16 MB)
 
 To create a function for querying the CC variants, call 
 `create_variant_query_func()` with the path to the `cc_variants.sqlite` file:
 
 ```{r query_variants}
-query_variants <- create_variant_query_func(dbfile   = "./data/fv.2021.snps.db3",
-                                            id_field = "variants_id"))
+query_variants <- create_variant_query_func("../data/cc_variants.sqlite")
 ```
 
 To grab the variants in the interval 97-98 Mbp on chromosome 2, you’d then do 
@@ -187,19 +168,15 @@ the following:
 variants_2_97.5 <- query_variants(2, 97, 98)
 ```
 
-Similarly, to create a function for querying the MGI mouse gene annotations, 
-you call `create_gene_query_func()` with the path to the 
-`mouse_genes_mgi.sqlite` file:
+Similarly, to create a function for querying the MGI mouse gene annotations, you 
+call `create_gene_query_func()` with the path to the `mouse_genes_mgi.sqlite` 
+file:
 
 ```{r query_MGI}
-query_genes <- create_gene_query_func(dbfile      = "./data/fv.2021.snps.db3",
-                                      chr_field   = "chromosome", 
-                                      name_field  = "symbol",
-                                      start_field = "start_position", 
-                                      stop_field  = "end_position")
+query_genes <- create_gene_query_func("../data/mouse_genes_mgi.sqlite")
 ```
 
-To grab the genes overlapping the interval 97-98 Mbp on chromosome 2, you’d then
+To grab the genes overlapping the interval 97-98 Mbp on chromosome 2, you’d then 
 do the following:
 
 ```{r query_chr2_genes}
@@ -234,9 +211,9 @@ using the query function we defined above:
 variants <- query_variants(2, peak_Mbp - 1, peak_Mbp + 1)
 ```
 
-There are `r dim(variants)[1]` variants in the interval, including `r table(variants$type)[["snp"]]` SNPs, `r table(variants$type)[["indel"]]` indels,
+There are `r dim(variants)[1]` variants in the interval, including `r table(variants$type)[["snp"]]` SNPs, `r table(variants$type)[["indel"]]` indels, 
 and `r table(variants$type)[["SV"]]` structural variants. We’re treating all of 
-them as biallelic markers (all but the major allele in the eight founder strains
+them as biallelic markers (all but the major allele in the eight founder strains 
 binned into a single allele). In the following, we’re going to just say “SNP” 
 rather than “variant”, even though the variants include indels and structural 
 variants.
@@ -247,19 +224,20 @@ DO mice. That is, at each SNP, we want to collapse the eight founder allele
 probabilities to two SNP allele probabilities, using the SNP genotypes of the 
 founders.
 
-We do this assuming that the genotype probabilities were calculated sufficiently
+We do this assuming that the genotype probabilities were calculated sufficiently 
 densely that they can be assumed to be constant in intervals. With this 
 assumption, we then:
 
 - Find the interval for each SNP.
 - Reduce the SNPs to a “distinct” set: if two SNPs have the same strain 
-distribution pattern (SDP; the pattern of alleles in the eight founders) and are
+distribution pattern (SDP; the pattern of alleles in the eight founders) and are 
 in the same interval, by our assumption their allele probabilities will be the 
 same.
-- Take the average of the allele probabilities at the two endpoints of each interval.
+- Take the average of the allele probabilities at the two endpoints of each 
+interval.
 - Collapse the 8 allele probabilities to two according to each observed SDP in 
 the interval.
-- We further create a look-up table relating the full set of SNPs to the reduced
+- We further create a look-up table relating the full set of SNPs to the reduced 
 set (one of each observed SDP in each interval).
 
 All of these steps are combined into a single function `scan1snps()`, which 
@@ -271,20 +249,19 @@ will need to use `interp_map()` to get interpolated Mbp positions for the
 pseudomarkers.)
 
 ```{r make_lookup_table}
-out_snps <- scan1snps(pr, DOex$pmap, DOex$pheno, k[["2"]], sex, 
-                      query_func = query_variants, chr = 2, start = peak_Mbp - 1,
-                      end = peak_Mbp + 1, keep_all_snps = TRUE)
+out_snps <- scan1snps(pr, DOex$pmap, DOex$pheno, k[["2"]], sex, query_func=query_variants,
+                      chr=2, start=peak_Mbp-1, end=peak_Mbp+1, keep_all_snps=TRUE)
 ```
 
 The output is a list with two components: `lod` is a matrix of LOD scores (with 
 a single column, since we’re using just one phenotype), and `snpinfo` is a data 
-frame with SNP information. With the argument `keep_all_snps=TRUE`, the `snpinfo`
-data frame contains information about all of the variants in the region with an 
-index column indicating the equivalence classes.
+frame with SNP information. With the argument `keep_all_snps=TRUE`, the 
+`snpinfo` data frame contains information about all of the variants in the 
+region with an index column indicating the equivalence classes.
 
 The function `plot_snpasso()` can be used to plot the results, with points at 
 each of the SNPs. The default is to plot *all* SNPs. In this case, there are 
-27,737 variants in the region, but only 150 distinct ones.
+27737 variants in the region, but only 150 distinct ones.
 
 ```{r plot_snp_asso}
 par(mar=c(4.1, 4.1, 0.6, 0.6))
@@ -300,7 +277,7 @@ par(mar=c(4.1, 4.1, 0.6, 0.6))
 plot(out_snps$lod, out_snps$snpinfo)
 ```
 
-We can use our `query_genes()` function to identify the genes in the region, and
+We can use our `query_genes()` function to identify the genes in the region, and 
 `plot_genes()` to plot their locations. But also `plot_snpasso()` can take the 
 gene locations with the argument genes and then display them below the SNP 
 association results. Here, we are also highlighting the top SNPs in the SNP 
@@ -342,125 +319,19 @@ chromosomes.
 
 ```{r plot_gwas_scan}
 par(mar=c(4.1, 4.1, 0.6, 0.6))
-plot(out_gwas$lod, out_gwas$snpinfo, altcol = "green4", gap = 0)
+plot(out_gwas$lod, out_gwas$snpinfo, altcol="green4", gap=0)
 ```
 
 Note that while there are LOD scores on the X chromosome that are as large as 
 those on chromosome 2, we’re allowing a genotype × sex interaction on the X 
-chromosome and so the test has 3 degrees of freedom (versus 2 degrees of freedom
+chromosome and so the test has 3 degrees of freedom (versus 2 degrees of freedom 
 on the autosomes) and so the LOD scores will naturally be larger. If we’d used 
-the allele probabilities (apr above, calculated from `genoprob_to_alleleprob()`)
+the allele probabilities (apr above, calculated from `genoprob_to_alleleprob()`) 
 rather than the genotype probabilities, we would be performing a test with 1 
 degree of freedom on both the X chromosome and the autosomes.
 
-
-
-
-
-
-
-
-
-## Introduction
-
-This is a lesson created via The Carpentries Workbench. It is written in
-[Pandoc-flavored Markdown](https://pandoc.org/MANUAL.txt) for static files and
-[R Markdown][r-markdown] for dynamic files that can render code into output. 
-Please refer to the [Introduction to The Carpentries 
-Workbench](https://carpentries.github.io/sandpaper-docs/) for full documentation.
-
-What you need to know is that there are three sections required for a valid
-Carpentries lesson template:
-
- 1. `questions` are displayed at the beginning of the episode to prime the
-    learner for the content.
- 2. `objectives` are the learning objectives for an episode displayed with
-    the questions.
- 3. `keypoints` are displayed at the end of the episode to reinforce the
-    objectives.
-
-:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: instructor
-
-Inline instructor notes can help inform instructors of timing challenges
-associated with the lessons. They appear in the "Instructor View"
-
-::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
-::::::::::::::::::::::::::::::::::::: challenge 
-
-## Challenge 1: Can you do it?
-
-What is the output of this command?
-
-```r
-paste("This", "new", "lesson", "looks", "good")
-```
-
-:::::::::::::::::::::::: solution 
-
-## Output
- 
-```output
-[1] "This new lesson looks good"
-```
-
-:::::::::::::::::::::::::::::::::
-
-
-## Challenge 2: how do you nest solutions within challenge blocks?
-
-:::::::::::::::::::::::: solution 
-
-You can add a line with at least three colons and a `solution` tag.
-
-:::::::::::::::::::::::::::::::::
-::::::::::::::::::::::::::::::::::::::::::::::::
-
-## Figures
-
-You can also include figures generated from R Markdown:
-
-```{r pyramid, fig.alt = "pie chart illusion of a pyramid", fig.cap = "Sun arise each and every morning"}
-pie(
-  c(Sky = 78, "Sunny side of pyramid" = 17, "Shady side of pyramid" = 5), 
-  init.angle = 315, 
-  col = c("deepskyblue", "yellow", "yellow3"), 
-  border = FALSE
-)
-```
-
-Or you can use standard markdown for static figures with the following syntax:
-
-`![optional caption that appears below the figure](figure url){alt='alt text for
-accessibility purposes'}`
-
-![You belong in The Carpentries!](https://raw.githubusercontent.com/carpentries/logo/master/Badge_Carpentries.svg){alt='Blue Carpentries hex person logo with no text.'}
-
-::::::::::::::::::::::::::::::::::::: callout
-
-Callout sections can highlight information.
-
-They are sometimes used to emphasise particularly important points
-but are also used in some lessons to present "asides": 
-content that is not central to the narrative of the lesson,
-e.g. by providing the answer to a commonly-asked question.
-
-::::::::::::::::::::::::::::::::::::::::::::::::
-
-
-## Math
-
-One of our episodes contains $\LaTeX$ equations when describing how to create
-dynamic reports with {knitr}, so we now use mathjax to describe this:
-
-`$\alpha = \dfrac{1}{(1 - \beta)^2}$` becomes: $\alpha = \dfrac{1}{(1 - \beta)^2}$
-
-Cool, right?
-
 ::::::::::::::::::::::::::::::::::::: keypoints 
 
-- SNP association analysis with DO mice requires SNPs in the QTL regions.
+- "SNP association analysis with DO mice requires SNPs in the QTL regions."
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
-
-[r-markdown]: https://rmarkdown.rstudio.com/

@@ -2,21 +2,20 @@
 title: "Estimated QTL effects"
 teaching: 10
 exercises: 20
-questions:
-- "How do I find the estimated effects of a QTL on a phenotype?"
-objectives:
-- Obtain estimated QTL effects.
-- Plot estimated QTL effects.
-keypoints:
-- "Estimated founder allele effects can be plotted from the mapping model coefficients."
-- "Additive and dominance effects can be plotted using contrasts."
-source: Rmd
 ---
 
-```{r, include=FALSE}
-source("../bin/chunk-options.R")
-knitr_fig_path("11-")
-```
+:::::::::::::::::::::::::::::::::::::: questions 
+
+- "How do I find the estimated effects of a QTL on a phenotype?"
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::: objectives
+
+- Obtain estimated QTL effects.
+- Plot estimated QTL effects.
+
+::::::::::::::::::::::::::::::::::::::::::::::::
 
 ```{r load_dependencies, echo=FALSE}
 library(qtl2)
@@ -199,31 +198,40 @@ par(mar=c(4.1, 4.1, 0.6, 0.6))
 plot_pxg(g, iron$pheno[,"liver"], SEmult=2, swap_axes=TRUE, xlab="Liver phenotype")
 ```
 
+::::::::::::::::::::::::::::::::::::: challenge 
 
-> ## Challenge 1
-> Find the QTL effects for chromosome 16 for the liver phenotype.  
-> 1) Create an object `c16eff` to contain the effects.  
-> 2) Plot the chromosome 16 coefficients and add the LOD plot at bottom.
->
-> >
-> > ## Solution to Challenge 1
-> > 1) `c16eff <- scan1coef(pr[,"16"], iron$pheno[,"liver"])`  
-> > 2) `plot_coef(c16eff, map, legend = "topright", scan1_output = out)`
-> {: .solution}
-{: .challenge}
+## Challenge 1
 
-> ## Challenge 2
-> In the code block above, we use `swap_axes=TRUE` to place the phenotype
-> on the x-axis. 
-> We can use `SEmult=2` to include the mean ± 2 SE intervals.  
-> 1) How would you decide which chromosome to plot? Discuss this with 
-> your neighbor, then write your responses in the collaborative document.  
-> 2) Calculate and plot the best linear unbiased predictors (blups) for
-> spleen on the chromosome of your choice.
->
-> >
-> > ## Solution to Challenge 2
-> >
-> >
-> {: .solution}
-{: .challenge}
+Find the QTL effects for chromosome 16 for the liver phenotype.  
+1) Create an object `c16eff` to contain the effects.  
+2) Plot the chromosome 16 coefficients and add the LOD plot at bottom.
+
+:::::::::::::::::::::::: solution 
+
+1) `c16eff <- scan1coef(pr[,"16"], iron$pheno[,"liver"])`  
+2) `plot_coef(c16eff, map, legend = "topright", scan1_output = out)`
+
+:::::::::::::::::::::::::::::::::
+
+## Challenge 2
+
+In the code block above, we use `swap_axes=TRUE` to place the phenotype on the 
+x-axis. We can use `SEmult=2` to include the mean ± 2 SE intervals.  
+
+1) How would you decide which chromosome to plot? Discuss this with your 
+neighbor, then write your responses in the collaborative document.  
+2) Calculate and plot the best linear unbiased predictors (blups) for spleen on 
+the chromosome of your choice.
+
+:::::::::::::::::::::::: solution 
+
+
+:::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::: keypoints 
+
+- "Estimated founder allele effects can be plotted from the mapping model coefficients."
+- "Additive and dominance effects can be plotted using contrasts." 
+
+::::::::::::::::::::::::::::::::::::::::::::::::
