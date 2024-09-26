@@ -14,7 +14,7 @@ exercises: 15
 
 - Get the X covariates for a cross.
 
-::::::::::::::::::::::::::::::::::::::::::::::::---
+::::::::::::::::::::::::::::::::::::::::::::::::
 
 ```{r load_data, echo=FALSE}
 library(qtl2)
