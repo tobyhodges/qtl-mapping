@@ -2,11 +2,18 @@
 title: "Input File Format"
 teaching: 15
 exercises: 30
-questions:
+---
+
+:::::::::::::::::::::::::::::::::::::: questions 
+
 - "How are the data files formatted for qtl2?"
 - "Which data files are required for qtl2?"
 - "Where can I find sample data for mapping with the qtl2 package?"
-objectives:
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::: objectives
+
 - To specify which input files are required for qtl2 and how they should be formatted.
 - To locate sample data for qtl mapping.
 keypoints:
@@ -16,13 +23,8 @@ keypoints:
 - "In addition to primary data, a separate file with control parameters (or metadata) in either [YAML](http://www.yaml.org) or [JSON](http://json.org) format is required."
 - "Published and public data already formatted for QTL mapping are available on the web."
 - "These data can be used as a model for formatting your own QTL data."
-source: Rmd
----
 
-```{r, include=FALSE}
-source("../bin/chunk-options.R")
-knitr_fig_path("02-")
-```
+::::::::::::::::::::::::::::::::::::::::::::::::
 
 QTL mapping data consists of a set of tables of data: marker
 genotypes, phenotypes, marker maps, etc. These different tables are in different comma-separated value (CSV) files. In each file, the first column is a set of IDs for the rows, and the first row is a set of IDs for the columns. For example, the genotype data file will have individual IDs in the first column, marker names for the rest of the column headers.
@@ -85,46 +87,51 @@ simplifies the function for reading in the data. That function,
 
 For further details, see the separate [vignette on the input file format](http://kbroman.org/qtl2/assets/vignettes/input_files.html).
 
-> ## Challenge 1
-> 1. Which data files are required by `qtl2`?  
-> 2. Which ones are optional?  
-> 3. How should they be formatted?
->
-> > ## Solution to Challenge 1
-> > 1. marker genotypes, phenotypes, genetic map
-> > 2. physical map
-> > 1. csv; JSON or YAML for control file
-> {: .solution}
-{: .challenge}
+::::::::::::::::::::::::::::::::::::: challenge 
+
+## Challenge 1: What data does qtl2 need?
+
+1. Which data files are required by `qtl2`?  
+2. Which ones are optional?  
+3. How should they be formatted?
+
+:::::::::::::::::::::::: solution 
+
+1. marker genotypes, phenotypes, genetic map
+1. physical map
+1. csv; JSON or YAML for control file
+
+:::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::::::::::::::
 
 ## Sample data sets
 
 In this lesson, we'll work with data sets included in the `qtl2` package. You can find out more about the [sample data files](http://kbroman.org/qtl2/pages/sampledata.html) from the R/qtl2 web site. Zipped versions of these datasets are included with the [qtl2geno](https://github.com/rqtl/qtl2geno) package and can be loaded into R using the `read_cross2()` function.
 Additional sample data sets, including data on Diversity Outbred (DO) mice, are available at <https://github.com/rqtl/qtl2data>.
 
-> ## Challenge 2
-> Go to <https://github.com/rqtl/qtl2data> to view additional sample data.  
-> 1). Find the Recla data and locate the phenotype data file. Open the file by clicking on the file name. What is in the first column? the first row?  
-> 2). Locate the genotype data file, click on the file name, and view the raw data. What is in the first column? the first row?  
-> 3). Locate the covariates file and open it by clicking on the file name. What kind of information does this file contain?  
-> 4). Locate the control file (YAML or JSON format) and open it. What kind of information does this file contain?  
->
-> > ## Solution to Challenge 2
-> >
-> > 1). What is in the first column of the phenotype file? Animal ID. The first row? Phenotype variable names - OF_distance_first4, OF_distance, OF_corner_pct, OF_periphery_pct, ...  
-> > 2). What is in the first column of the genotype file? marker ID. the first row? Animal ID - 1,4,5,6,7,8,9,10, ...  
-> 3). Locate the covariates file and open it. What kind of information does this file contain? Animal ID, sex, cohort, group, subgroup, ngen, and coat color.  
-> 4). Locate the control file (YAML or JSON format) and open it. What kind of information does this file contain? Names of primary data files, genotype and allele codes, cross type, description, and other metadata.
-> {: .solution}
-{: .challenge}
+::::::::::::::::::::::::::::::::::::: challenge 
+
+## Challenge 2: Can you do it?
+
+Go to <https://github.com/rqtl/qtl2data> to view additional sample data.  
+1). Find the Recla data and locate the phenotype data file. Open the file by clicking on the file name. What is in the first column? the first row?  
+2). Locate the genotype data file, click on the file name, and view the raw data. What is in the first column? the first row?  
+3). Locate the covariates file and open it by clicking on the file name. What kind of information does this file contain?  
+4). Locate the control file (YAML or JSON format) and open it. What kind of information does this file contain? 
+
+:::::::::::::::::::::::: solution 
+
+1). What is in the first column of the phenotype file? Animal ID. The first row? Phenotype variable names - OF_distance_first4, OF_distance, OF_corner_pct, OF_periphery_pct, ...  
+2). What is in the first column of the genotype file? marker ID. the first row? Animal ID - 1,4,5,6,7,8,9,10, ...  
+3). Locate the covariates file and open it. What kind of information does this file contain? Animal ID, sex, cohort, group, subgroup, ngen, and coat color.  
+4). Locate the control file (YAML or JSON format) and open it. What kind of information does this file contain? Names of primary data files, genotype and allele codes, cross type, description, and other metadata.
+
+:::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::::::::::::::
 
 
 ## Preparing your Diversity Outbred (DO) data for qtl2
 
 Karl Broman provides detailed instructions for [preparing DO mouse data for R/qtl2](https://kbroman.org/qtl2/pages/prep_do_data.html).
-
-
-
-
-
-
