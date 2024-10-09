@@ -16,38 +16,28 @@ exercises: 30
 
 - To specify which input files are required for qtl2 and how they should be formatted.
 - To locate sample data for qtl mapping.
-keypoints:
-- "QTL mapping data consists of a set of tables of data: marker genotypes, 
-phenotypes, marker maps, etc."
-- "These different tables are in separate comma-delimited (CSV) files."
-- "In each file, the first column is a set of IDs for the rows, and the first 
-row is a set of IDs for the columns."
-- "In addition to primary data, a separate file with control parameters (or 
-metadata) in either [YAML](http://www.yaml.org) or [JSON](http://json.org) 
-format is required."
-- "Published and public data already formatted for QTL mapping are available on 
-the web."
-- "These data can be used as a model for formatting your own QTL data."
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
-QTL mapping data consists of a set of tables of data: marker
-genotypes, phenotypes, marker maps, etc. These different tables are in different 
+QTL mapping data consists of a set of tables of data: sample genotypes, 
+phenotypes, marker maps, etc. These different tables are in different 
 comma-separated value (CSV) files. In each file, the first column is a set of 
 IDs for the rows, and the first row is a set of IDs for the columns. For 
 example, the genotype data file will have individual IDs in the first column, 
 marker names for the rest of the column headers.
 
-![](fig/iron-geno-sample.png)
+![Attie Sample Genotypes](fig/attie_geno_sample.png){Table showing the mouse genotypes as BB, BR, and RR.}
 
-The sample genotype file above shows two alleles: S and B. These represent the founder strains for an intercross, which are C57BL/6 (BB) and SWR (SS) 
-[(Grant et al. (2006) Hepatology 44:174-185)](https://pubmed.ncbi.nlm.nih.gov/16799992/). 
-The B and S alleles themselves represent the haplotypes inherited from the 
-parental strains C57BL/6 and SWR.  
+The sample genotype file above shows two alleles: B and R. These represent the 
+founder strains for an intercross, which are C57BL/6 (BB) and BTBR (RR) 
+[Tian et al](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4649649/). 
+The B and R alleles themselves represent the haplotypes inherited from the 
+parental strains C57BL/6 and BTBR.  
 
-In the Diversity Outbred (DO) and Collaborative Cross (CC), alleles A to H represent haplotypes of the 8 founder strains.
+In the Diversity Outbred (DO) and Collaborative Cross (CC), alleles A to H 
+represent haplotypes of the 8 founder strains.
 
-![](fig/cc-founder-alleles.png)
+![CC and DO Founder Alleles](fig/cc-founder-alleles.png){Figure showing the colors and letter codes of the CC/DO founders.}
 
 CC lines have very low heterozygosity throughout their genomes. For most loci, 
 CC lines will be homozygous for one of the founder strains A-H above, and as
@@ -73,20 +63,23 @@ R/qtl2 accepts the following files:
 We use both a genetic marker map and a physical map (if available). A sample 
 from a genetic map of MIT markers is shown here.
 
-![](fig/iron-geno-map-sample.png)
+![Attie Genetic Map](fig/attie_geno_map_sample.png){alt='Table showing the marker, chromosome, and centimorgan position for five markers'}
 
 A physical marker map provides location in bases rather than centiMorgans.
 
-![](fig/iron-phys-map-sample.png)
+![Attie Physical Map](fig/attie_phys_map_sample.png){alt='Table showing top five rows of physical marker map.'}
 
 Numeric phenotypes are separate from the often non-numeric covariates.
 
-![](fig/iron-pheno-sample.png)
+![Attie Phenotypes](fig/attie_pheno_sample.png){alt='Table showing top five rows of phenotype table, including insulin'}
 
-Phenotype covariates are [metadata](https://en.wikipedia.org/wiki/Metadata) describing the phenotypes. For example, in the case of a phenotype measured over time, one column in the phenotype covariate data could be the time of 
-measurement. For gene expression data, we would have columns representing chromosome and physical position of genes, as well as gene IDs.
+Phenotype covariates are [metadata](https://en.wikipedia.org/wiki/Metadata) 
+describing the phenotypes. For example, in the case of a phenotype measured over
+time, one column in the phenotype covariate data could be the time of 
+measurement. For gene expression data, we would have columns representing 
+chromosome and physical position of genes, as well as gene IDs.
 
-![](fig/iron-phenocovar-sample.png)
+![Attie Covariates](fig/attie_covar_sample.png){alt='Table showing the top five rows of covariates table'}
 
 In addition to the set of CSV files with the primary data, we need a separate control file with various control parameters
 (or metadata), including the names of all of the other data files and the 
@@ -94,7 +87,7 @@ genotype codes used in the genotype data file. The control file is in a specific
 [JSON](http://json.org); these are human-readable text files for
 representing relatively complex data.
 
-![](fig/iron-control-file-sample.png)
+![Attie Control File](fig/attie_control_file_sample.png){alt='Figure showing the qtl2 control file',width=75%}
 
 
 A big advantage of this control file scheme is that it greatly
@@ -156,4 +149,24 @@ file contain? Animal ID, sex, cohort, group, subgroup, ngen, and coat color.
 
 ## Preparing your Diversity Outbred (DO) data for qtl2
 
-Karl Broman provides detailed instructions for [preparing DO mouse data for R/qtl2](https://kbroman.org/qtl2/pages/prep_do_data.html).
+Karl Broman provides detailed instructions for 
+[preparing DO mouse data for R/qtl2](https://kbroman.org/qtl2/pages/prep_do_data.html).
+
+::::::::::::::::::::::::::::::::::::: keypoints 
+
+- "QTL mapping data consists of a set of tables of data: marker genotypes, 
+phenotypes, marker maps, etc."
+- "These different tables are in separate comma-delimited (CSV) files."
+- "In each file, the first column is a set of IDs for the rows, and the first 
+row is a set of IDs for the columns."
+- "In addition to primary data, a separate file with control parameters (or 
+metadata) in either [YAML](http://www.yaml.org) or [JSON](http://json.org) 
+format is required."
+- "Published and public data already formatted for QTL mapping are available on 
+the web."
+- "These data can be used as a model for formatting your own QTL data."
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+[r-markdown]: https://rmarkdown.rstudio.com/
+
