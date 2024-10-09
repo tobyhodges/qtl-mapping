@@ -64,7 +64,16 @@ For this course, we will have several data files which you will need to
 download to the "data" directory in the project folder on your Desktop.
 Copy, paste, and run the following code in the RStudio console.
 
-The first file contains the Diversity Outbred mapping data.
+The first file contains the data that we will use for QTL mapping in an F2
+population
+
+```r
+download.file(url      = "https://thejacksonlaboratory.box.com/shared/static/svw7ivp5hhmd7vb8fy26tc53h7r85wez.zip",
+              destfile = "data/attie_b6btbr_grcm39.Rdata",
+              mode     = "wb")
+```
+
+The second file contains the Diversity Outbred mapping data.
 
 ```r
 download.file(url      = "https://thejacksonlaboratory.box.com/shared/static/wspizp2jgrtngvvw5ixredpu7627mh5w.rdata",
