@@ -17,19 +17,26 @@ exercises: 30
 - To specify which input files are required for qtl2 and how they should be formatted.
 - To locate sample data for qtl mapping.
 keypoints:
-- "QTL mapping data consists of a set of tables of data: marker genotypes, phenotypes, marker maps, etc."
+- "QTL mapping data consists of a set of tables of data: marker genotypes, 
+phenotypes, marker maps, etc."
 - "These different tables are in separate comma-delimited (CSV) files."
-- "In each file, the first column is a set of IDs for the rows, and the first row is a set of IDs for the columns."
-- "In addition to primary data, a separate file with control parameters (or metadata) in either [YAML](http://www.yaml.org) or [JSON](http://json.org) format is required."
-- "Published and public data already formatted for QTL mapping are available on the web."
+- "In each file, the first column is a set of IDs for the rows, and the first 
+row is a set of IDs for the columns."
+- "In addition to primary data, a separate file with control parameters (or 
+metadata) in either [YAML](http://www.yaml.org) or [JSON](http://json.org) 
+format is required."
+- "Published and public data already formatted for QTL mapping are available on 
+the web."
 - "These data can be used as a model for formatting your own QTL data."
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 QTL mapping data consists of a set of tables of data: marker
-genotypes, phenotypes, marker maps, etc. These different tables are in different comma-separated value (CSV) files. In each file, the first column is a set of 
+genotypes, phenotypes, marker maps, etc. These different tables are in different 
+comma-separated value (CSV) files. In each file, the first column is a set of 
 IDs for the rows, and the first row is a set of IDs for the columns. For 
-example, the genotype data file will have individual IDs in the first column, marker names for the rest of the column headers.
+example, the genotype data file will have individual IDs in the first column, 
+marker names for the rest of the column headers.
 
 ![](fig/iron-geno-sample.png)
 
