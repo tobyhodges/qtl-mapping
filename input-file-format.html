@@ -422,40 +422,31 @@ package?”</li>
 <h3 class="card-title">Objectives</h3>
 <ul><li>To specify which input files are required for qtl2 and how they
 should be formatted.</li>
-<li>To locate sample data for qtl mapping. keypoints:</li>
-<li>“QTL mapping data consists of a set of tables of data: marker
-genotypes, phenotypes, marker maps, etc.”</li>
-<li>“These different tables are in separate comma-delimited (CSV)
-files.”</li>
-<li>“In each file, the first column is a set of IDs for the rows, and
-the first row is a set of IDs for the columns.”</li>
-<li>“In addition to primary data, a separate file with control
-parameters (or metadata) in either <a href="http://www.yaml.org" class="external-link">YAML</a> or <a href="http://json.org" class="external-link">JSON</a> format is required.”</li>
-<li>“Published and public data already formatted for QTL mapping are
-available on the web.”</li>
-<li>“These data can be used as a model for formatting your own QTL
-data.”</li>
+<li>To locate sample data for qtl mapping.</li>
 </ul></div>
 </div>
 </div>
 </div>
 </div>
-<p>QTL mapping data consists of a set of tables of data: marker
+<p>QTL mapping data consists of a set of tables of data: sample
 genotypes, phenotypes, marker maps, etc. These different tables are in
 different comma-separated value (CSV) files. In each file, the first
 column is a set of IDs for the rows, and the first row is a set of IDs
 for the columns. For example, the genotype data file will have
 individual IDs in the first column, marker names for the rest of the
 column headers.</p>
-<figure><img src="fig/iron-geno-sample.png" class="figure mx-auto d-block"></figure><p>The sample genotype file above shows two alleles: S and B. These
+<p><img src="fig/attie_geno_sample.png" alt="Attie Sample Genotypes" class="figure">{Table showing the mouse genotypes as BB,
+BR, and RR.}</p>
+<p>The sample genotype file above shows two alleles: B and R. These
 represent the founder strains for an intercross, which are C57BL/6 (BB)
-and SWR (SS) <a href="https://pubmed.ncbi.nlm.nih.gov/16799992/" class="external-link">(Grant
-et al. (2006) Hepatology 44:174-185)</a>. The B and S alleles themselves
-represent the haplotypes inherited from the parental strains C57BL/6 and
-SWR.</p>
+and BTBR (RR) <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4649649/" class="external-link">Tian et
+al</a>. The B and R alleles themselves represent the haplotypes
+inherited from the parental strains C57BL/6 and BTBR.</p>
 <p>In the Diversity Outbred (DO) and Collaborative Cross (CC), alleles A
 to H represent haplotypes of the 8 founder strains.</p>
-<figure><img src="fig/cc-founder-alleles.png" class="figure mx-auto d-block"></figure><p>CC lines have very low heterozygosity throughout their genomes. For
+<p><img src="fig/cc-founder-alleles.png" alt="CC and DO Founder Alleles" class="figure">{Figure showing the colors and letter
+codes of the CC/DO founders.}</p>
+<p>CC lines have very low heterozygosity throughout their genomes. For
 most loci, CC lines will be homozygous for one of the founder strains
 A-H above, and as such will have one of only 8 genotypes (<em>e.g.</em>
 AA, BB, CC, …). In contrast, DO <em>mice</em> (not lines) have high
@@ -474,23 +465,29 @@ phenotype covariates (<em>i.e.</em> tissue type, time points)<br>
 6. control file (YAML or JSON format, not CSV)</p>
 <p>We use both a genetic marker map and a physical map (if available). A
 sample from a genetic map of MIT markers is shown here.</p>
-<figure><img src="fig/iron-geno-map-sample.png" class="figure mx-auto d-block"></figure><p>A physical marker map provides location in bases rather than
+<figure><img src="fig/attie_geno_map_sample.png" alt="Table showing the marker, chromosome, and centimorgan position for five markers" class="figure mx-auto d-block"><div class="figcaption">Attie Genetic Map</div>
+</figure><p>A physical marker map provides location in bases rather than
 centiMorgans.</p>
-<figure><img src="fig/iron-phys-map-sample.png" class="figure mx-auto d-block"></figure><p>Numeric phenotypes are separate from the often non-numeric
+<figure><img src="fig/attie_phys_map_sample.png" alt="Table showing top five rows of physical marker map." class="figure mx-auto d-block"><div class="figcaption">Attie Physical Map</div>
+</figure><p>Numeric phenotypes are separate from the often non-numeric
 covariates.</p>
-<figure><img src="fig/iron-pheno-sample.png" class="figure mx-auto d-block"></figure><p>Phenotype covariates are <a href="https://en.wikipedia.org/wiki/Metadata" class="external-link">metadata</a> describing
+<figure><img src="fig/attie_pheno_sample.png" alt="Table showing top five rows of phenotype table, including insulin" class="figure mx-auto d-block"><div class="figcaption">Attie Phenotypes</div>
+</figure><p>Phenotype covariates are <a href="https://en.wikipedia.org/wiki/Metadata" class="external-link">metadata</a> describing
 the phenotypes. For example, in the case of a phenotype measured over
 time, one column in the phenotype covariate data could be the time of
 measurement. For gene expression data, we would have columns
 representing chromosome and physical position of genes, as well as gene
 IDs.</p>
-<figure><img src="fig/iron-phenocovar-sample.png" class="figure mx-auto d-block"></figure><p>In addition to the set of CSV files with the primary data, we need a
+<figure><img src="fig/attie_covar_sample.png" alt="Table showing the top five rows of covariates table" class="figure mx-auto d-block"><div class="figcaption">Attie Covariates</div>
+</figure><p>In addition to the set of CSV files with the primary data, we need a
 separate control file with various control parameters (or metadata),
 including the names of all of the other data files and the genotype
 codes used in the genotype data file. The control file is in a specific
 format using either <a href="http://www.yaml.org" class="external-link">YAML</a> or <a href="http://json.org" class="external-link">JSON</a>; these are human-readable text files for
 representing relatively complex data.</p>
-<figure><img src="fig/iron-control-file-sample.png" class="figure mx-auto d-block"></figure><p>A big advantage of this control file scheme is that it greatly
+<p><img src="fig/attie_control_file_sample.png" alt="Attie Control File" class="figure">{alt=‘Figure showing the qtl2 control
+file’,width=75%}</p>
+<p>A big advantage of this control file scheme is that it greatly
 simplifies the function for reading in the data. That function,
 <code>read_cross2()</code>, has a <em>single</em> argument: the name
 (with path) of the control file.</p>
@@ -514,7 +511,7 @@ on the input file format</a>.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <ol style="list-style-type: decimal"><li>marker genotypes, phenotypes, genetic map</li>
 <li>physical map</li>
@@ -557,7 +554,7 @@ of information does this file contain?</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
 <div class="accordion-body">
 <p>1). What is in the first column of the phenotype file? Animal ID. The
 first row? Phenotype variable names - OF_distance_first4, OF_distance,
@@ -578,6 +575,28 @@ metadata.</p>
 </section><section><h2 class="section-heading" id="preparing-your-diversity-outbred-do-data-for-qtl2">Preparing your Diversity Outbred (DO) data for qtl2<a class="anchor" aria-label="anchor" href="#preparing-your-diversity-outbred-do-data-for-qtl2"></a></h2>
 <hr class="half-width"><p>Karl Broman provides detailed instructions for <a href="https://kbroman.org/qtl2/pages/prep_do_data.html" class="external-link">preparing DO
 mouse data for R/qtl2</a>.</p>
+<div id="keypoints1" class="callout keypoints">
+<div class="callout-square">
+<i class="callout-icon" data-feather="key"></i>
+</div>
+<div class="callout-inner">
+<h3 class="callout-title">Key Points</h3>
+<div class="callout-content">
+<ul><li>“QTL mapping data consists of a set of tables of data: marker
+genotypes, phenotypes, marker maps, etc.”</li>
+<li>“These different tables are in separate comma-delimited (CSV)
+files.”</li>
+<li>“In each file, the first column is a set of IDs for the rows, and
+the first row is a set of IDs for the columns.”</li>
+<li>“In addition to primary data, a separate file with control
+parameters (or metadata) in either <a href="http://www.yaml.org" class="external-link">YAML</a> or <a href="http://json.org" class="external-link">JSON</a> format is required.”</li>
+<li>“Published and public data already formatted for QTL mapping are
+available on the web.”</li>
+<li>“These data can be used as a model for formatting your own QTL
+data.”</li>
+</ul></div>
+</div>
+</div>
 <!--
 Place links that you need to refer to multiple times across pages here. Delete
 any links that you are not going to use.

@@ -516,7 +516,7 @@ reinforce the objectives.</li>
 <button class="accordion-button instructor-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseInstructor1" aria-expanded="false" aria-controls="collapseInstructor1">
   <h3 class="accordion-header" id="headingInstructor1">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="edit-2"></i></div> Instructor Note </h3>
 </button>
-<div id="collapseInstructor1" class="accordion-collapse collapse" aria-labelledby="headingInstructor1" data-bs-parent="#accordionInstructor1">
+<div id="collapseInstructor1" class="accordion-collapse collapse" data-bs-parent="#accordionInstructor1" aria-labelledby="headingInstructor1">
 <div class="accordion-body">
 <p>Inline instructor notes can help inform instructors of timing
 challenges associated with the lessons. They appear in the “Instructor
@@ -547,7 +547,7 @@ View”</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Output </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
 <div class="codewrapper">
 <h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -574,7 +574,7 @@ View”</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
 <div class="accordion-body">
 <p>You can add a line with at least three colons and a
 <code>solution</code> tag.</p>
@@ -771,41 +771,32 @@ package?”</li>
 <ul>
 <li>To specify which input files are required for qtl2 and how they
 should be formatted.</li>
-<li>To locate sample data for qtl mapping. keypoints:</li>
-<li>“QTL mapping data consists of a set of tables of data: marker
-genotypes, phenotypes, marker maps, etc.”</li>
-<li>“These different tables are in separate comma-delimited (CSV)
-files.”</li>
-<li>“In each file, the first column is a set of IDs for the rows, and
-the first row is a set of IDs for the columns.”</li>
-<li>“In addition to primary data, a separate file with control
-parameters (or metadata) in either <a href="http://www.yaml.org" class="external-link">YAML</a> or <a href="http://json.org" class="external-link">JSON</a> format is required.”</li>
-<li>“Published and public data already formatted for QTL mapping are
-available on the web.”</li>
-<li>“These data can be used as a model for formatting your own QTL
-data.”</li>
+<li>To locate sample data for qtl mapping.</li>
 </ul>
 </div>
 </div>
 </div>
 </div>
 </div>
-<p>QTL mapping data consists of a set of tables of data: marker
+<p>QTL mapping data consists of a set of tables of data: sample
 genotypes, phenotypes, marker maps, etc. These different tables are in
 different comma-separated value (CSV) files. In each file, the first
 column is a set of IDs for the rows, and the first row is a set of IDs
 for the columns. For example, the genotype data file will have
 individual IDs in the first column, marker names for the rest of the
 column headers.</p>
-<figure><img src="../fig/iron-geno-sample.png" class="figure mx-auto d-block"></figure><p>The sample genotype file above shows two alleles: S and B. These
+<p><img src="../fig/attie_geno_sample.png" alt="Attie Sample Genotypes" class="figure">{Table showing the mouse genotypes as BB,
+BR, and RR.}</p>
+<p>The sample genotype file above shows two alleles: B and R. These
 represent the founder strains for an intercross, which are C57BL/6 (BB)
-and SWR (SS) <a href="https://pubmed.ncbi.nlm.nih.gov/16799992/" class="external-link">(Grant
-et al. (2006) Hepatology 44:174-185)</a>. The B and S alleles themselves
-represent the haplotypes inherited from the parental strains C57BL/6 and
-SWR.</p>
+and BTBR (RR) <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4649649/" class="external-link">Tian et
+al</a>. The B and R alleles themselves represent the haplotypes
+inherited from the parental strains C57BL/6 and BTBR.</p>
 <p>In the Diversity Outbred (DO) and Collaborative Cross (CC), alleles A
 to H represent haplotypes of the 8 founder strains.</p>
-<figure><img src="../fig/cc-founder-alleles.png" class="figure mx-auto d-block"></figure><p>CC lines have very low heterozygosity throughout their genomes. For
+<p><img src="../fig/cc-founder-alleles.png" alt="CC and DO Founder Alleles" class="figure">{Figure showing the colors and letter
+codes of the CC/DO founders.}</p>
+<p>CC lines have very low heterozygosity throughout their genomes. For
 most loci, CC lines will be homozygous for one of the founder strains
 A-H above, and as such will have one of only 8 genotypes (<em>e.g.</em>
 AA, BB, CC, …). In contrast, DO <em>mice</em> (not lines) have high
@@ -824,23 +815,29 @@ phenotype covariates (<em>i.e.</em> tissue type, time points)<br>
 6. control file (YAML or JSON format, not CSV)</p>
 <p>We use both a genetic marker map and a physical map (if available). A
 sample from a genetic map of MIT markers is shown here.</p>
-<figure><img src="../fig/iron-geno-map-sample.png" class="figure mx-auto d-block"></figure><p>A physical marker map provides location in bases rather than
+<figure><img src="../fig/attie_geno_map_sample.png" alt="Table showing the marker, chromosome, and centimorgan position for five markers" class="figure mx-auto d-block"><div class="figcaption">Attie Genetic Map</div>
+</figure><p>A physical marker map provides location in bases rather than
 centiMorgans.</p>
-<figure><img src="../fig/iron-phys-map-sample.png" class="figure mx-auto d-block"></figure><p>Numeric phenotypes are separate from the often non-numeric
+<figure><img src="../fig/attie_phys_map_sample.png" alt="Table showing top five rows of physical marker map." class="figure mx-auto d-block"><div class="figcaption">Attie Physical Map</div>
+</figure><p>Numeric phenotypes are separate from the often non-numeric
 covariates.</p>
-<figure><img src="../fig/iron-pheno-sample.png" class="figure mx-auto d-block"></figure><p>Phenotype covariates are <a href="https://en.wikipedia.org/wiki/Metadata" class="external-link">metadata</a> describing
+<figure><img src="../fig/attie_pheno_sample.png" alt="Table showing top five rows of phenotype table, including insulin" class="figure mx-auto d-block"><div class="figcaption">Attie Phenotypes</div>
+</figure><p>Phenotype covariates are <a href="https://en.wikipedia.org/wiki/Metadata" class="external-link">metadata</a> describing
 the phenotypes. For example, in the case of a phenotype measured over
 time, one column in the phenotype covariate data could be the time of
 measurement. For gene expression data, we would have columns
 representing chromosome and physical position of genes, as well as gene
 IDs.</p>
-<figure><img src="../fig/iron-phenocovar-sample.png" class="figure mx-auto d-block"></figure><p>In addition to the set of CSV files with the primary data, we need a
+<figure><img src="../fig/attie_covar_sample.png" alt="Table showing the top five rows of covariates table" class="figure mx-auto d-block"><div class="figcaption">Attie Covariates</div>
+</figure><p>In addition to the set of CSV files with the primary data, we need a
 separate control file with various control parameters (or metadata),
 including the names of all of the other data files and the genotype
 codes used in the genotype data file. The control file is in a specific
 format using either <a href="http://www.yaml.org" class="external-link">YAML</a> or <a href="http://json.org" class="external-link">JSON</a>; these are human-readable text files for
 representing relatively complex data.</p>
-<figure><img src="../fig/iron-control-file-sample.png" class="figure mx-auto d-block"></figure><p>A big advantage of this control file scheme is that it greatly
+<p><img src="../fig/attie_control_file_sample.png" alt="Attie Control File" class="figure">{alt=‘Figure showing the qtl2 control
+file’,width=75%}</p>
+<p>A big advantage of this control file scheme is that it greatly
 simplifies the function for reading in the data. That function,
 <code>read_cross2()</code>, has a <em>single</em> argument: the name
 (with path) of the control file.</p>
@@ -868,7 +865,7 @@ on the input file format</a>.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <ol style="list-style-type: decimal">
 <li>marker genotypes, phenotypes, genetic map</li>
@@ -915,7 +912,7 @@ of information does this file contain?</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
 <div class="accordion-body">
 <p>1). What is in the first column of the phenotype file? Animal ID. The
 first row? Phenotype variable names - OF_distance_first4, OF_distance,
@@ -938,6 +935,30 @@ metadata.</p>
 <hr class="half-width">
 <p>Karl Broman provides detailed instructions for <a href="https://kbroman.org/qtl2/pages/prep_do_data.html" class="external-link">preparing DO
 mouse data for R/qtl2</a>.</p>
+<div id="keypoints1" class="callout keypoints">
+<div class="callout-square">
+<i class="callout-icon" data-feather="key"></i>
+</div>
+<div class="callout-inner">
+<h3 class="callout-title">Key Points</h3>
+<div class="callout-content">
+<ul>
+<li>“QTL mapping data consists of a set of tables of data: marker
+genotypes, phenotypes, marker maps, etc.”</li>
+<li>“These different tables are in separate comma-delimited (CSV)
+files.”</li>
+<li>“In each file, the first column is a set of IDs for the rows, and
+the first row is a set of IDs for the columns.”</li>
+<li>“In addition to primary data, a separate file with control
+parameters (or metadata) in either <a href="http://www.yaml.org" class="external-link">YAML</a> or <a href="http://json.org" class="external-link">JSON</a> format is required.”</li>
+<li>“Published and public data already formatted for QTL mapping are
+available on the web.”</li>
+<li>“These data can be used as a model for formatting your own QTL
+data.”</li>
+</ul>
+</div>
+</div>
+</div>
 <!--
 Place links that you need to refer to multiple times across pages here. Delete
 any links that you are not going to use.
@@ -2565,7 +2586,7 @@ heatmap.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <p>1).
 <code>sparser_map &lt;- insert_pseudomarkers(map = map, step = 2)</code><br>
@@ -2596,7 +2617,7 @@ collaborative document or in your own personal notes.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
 <div class="accordion-body">
 
 </div>
@@ -2815,7 +2836,7 @@ as lodcolumn).</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
 <p>1).
 <code>grav_kinship &lt;- calc_kinship(gravpr, "loco")</code><br>
@@ -2849,7 +2870,7 @@ neighbor, and share your thoughts in the collaborative document.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
 <div class="accordion-body">
 
 </div>
@@ -2891,7 +2912,7 @@ colors.</li>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution3" aria-expanded="false" aria-controls="collapseSolution3">
   <h4 class="accordion-header" id="headingSolution3"> Show me the solution </h4>
 </button>
-<div id="collapseSolution3" class="accordion-collapse collapse" aria-labelledby="headingSolution3" data-bs-parent="#accordionSolution3">
+<div id="collapseSolution3" class="accordion-collapse collapse" data-bs-parent="#accordionSolution3" aria-labelledby="headingSolution3">
 <div class="accordion-body">
 <p><code>file &lt;- paste0("https://raw.githubusercontent.com/rqtl/", "qtl2data/master/B6BTBR/b6btbr.zip")</code><br><code>b6btbr &lt;- read_cross2(file)</code><br><code>summary(b6btbr)</code><br><code>head(b6btbr$pheno)</code><br><code>colnames(b6btbr$pheno)</code><br><code>b6bmap &lt;- insert_pseudomarkers(map=b6btbr$gmap, step=1)</code><br><code>prb6b &lt;- calc_genoprob(cross=b6btbr, map=b6bmap, error_prob=0.002)</code><br><code>b6bXcovar &lt;- get_x_covar(b6btbr)</code><br><code>b6bout &lt;- scan1(genoprobs = prb6b, pheno = b6btbr$pheno, Xcovar=b6bXcovar)</code><br><code>plot(b6bout, map = b6bmap)</code><br><code>b6bkinship &lt;- calc_kinship(probs = prb6b)</code><br><code>out_pg_b6b &lt;- scan1(prb6b, b6btbr$pheno, kinship=b6bkinship, Xcovar=b6bXcovar)</code><br><code>kinship_loco_b6b &lt;- calc_kinship(prb6b, "loco")</code><br><code>out_pg_loco_b6b &lt;- scan1(prb6b, b6btbr$pheno, kinship_loco_b6b, Xcovar=b6bXcovar)</code><br><code>plot_scan1(out_pg_loco_b6b, map = b6bmap, lodcolumn = "log10_insulin_10wk", col = "black")</code><br><code>plot_scan1(out_pg_b6b, map = b6bmap, lodcolumn = "log10_insulin_10wk", col = "blue", add = TRUE)</code><br><code>plot_scan1(b6bout, map = b6bmap, lodcolumn = "log10_insulin_10wk", col = "green", add = TRUE)</code></p>
 </div>
@@ -3332,7 +3353,7 @@ bottom.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
 <ol style="list-style-type: decimal">
 <li>
@@ -3370,7 +3391,7 @@ spleen on the chromosome of your choice.</li>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
 <div class="accordion-body">
 
 </div>
@@ -3515,7 +3536,7 @@ command in your new script.</p>
 <button class="accordion-button instructor-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseInstructor1" aria-expanded="false" aria-controls="collapseInstructor1">
   <h3 class="accordion-header" id="headingInstructor1">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="edit-2"></i></div> Instructor Note </h3>
 </button>
-<div id="collapseInstructor1" class="accordion-collapse collapse" aria-labelledby="headingInstructor1" data-bs-parent="#accordionInstructor1">
+<div id="collapseInstructor1" class="accordion-collapse collapse" data-bs-parent="#accordionInstructor1" aria-labelledby="headingInstructor1">
 <div class="accordion-body">
 <p>The code below is needed to load in the data objects to build the
 lesson on Github. The <code>*.Rdata</code> file is over 200 Mb and
@@ -3530,7 +3551,7 @@ Github has a file size limit of 100 Mb. The students should
 <button class="accordion-button instructor-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseInstructor2" aria-expanded="false" aria-controls="collapseInstructor2">
   <h3 class="accordion-header" id="headingInstructor2">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="edit-2"></i></div> Instructor Note </h3>
 </button>
-<div id="collapseInstructor2" class="accordion-collapse collapse" aria-labelledby="headingInstructor2" data-bs-parent="#accordionInstructor2">
+<div id="collapseInstructor2" class="accordion-collapse collapse" data-bs-parent="#accordionInstructor2" aria-labelledby="headingInstructor2">
 <div class="accordion-body">
 <p>This is the only block that the students need to run.</p>
 </div>
@@ -3591,7 +3612,7 @@ mice there are in the phenotype data.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Output </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
 <p>You can look at the number of observations in the Environment tab or
 you can get the number of rows in <code>pheno</code> in the Console.</p>
@@ -3628,7 +3649,7 @@ sex.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> Output </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
 <div class="accordion-body">
 <p>You can look at the number of observations in the Environment tab or
 you can get the number of rows in <code>pheno</code> in the Console.</p>
@@ -3666,7 +3687,7 @@ is normally distributed.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution3" aria-expanded="false" aria-controls="collapseSolution3">
   <h4 class="accordion-header" id="headingSolution3"> Output </h4>
 </button>
-<div id="collapseSolution3" class="accordion-collapse collapse" aria-labelledby="headingSolution3" data-bs-parent="#accordionSolution3">
+<div id="collapseSolution3" class="accordion-collapse collapse" data-bs-parent="#accordionSolution3" aria-labelledby="headingSolution3">
 <div class="accordion-body">
 <p>You can look at the number of observations in the Environment tab or
 you can get the number of rows in <code>pheno</code> in the Console.</p>
@@ -3706,7 +3727,7 @@ histogram.Assess whether it is normally distributed.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution4" aria-expanded="false" aria-controls="collapseSolution4">
   <h4 class="accordion-header" id="headingSolution4"> Output </h4>
 </button>
-<div id="collapseSolution4" class="accordion-collapse collapse" aria-labelledby="headingSolution4" data-bs-parent="#accordionSolution4">
+<div id="collapseSolution4" class="accordion-collapse collapse" data-bs-parent="#accordionSolution4" aria-labelledby="headingSolution4">
 <div class="accordion-body">
 <p>You can look at the number of observations in the Environment tab or
 you can get the number of rows in <code>pheno</code> in the Console.</p>
@@ -3762,7 +3783,7 @@ benzene concentration for each study cohort.</p>
 <button class="accordion-button instructor-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseInstructor3" aria-expanded="false" aria-controls="collapseInstructor3">
   <h3 class="accordion-header" id="headingInstructor3">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="edit-2"></i></div> Instructor Note </h3>
 </button>
-<div id="collapseInstructor3" class="accordion-collapse collapse" aria-labelledby="headingInstructor3" data-bs-parent="#accordionInstructor3">
+<div id="collapseInstructor3" class="accordion-collapse collapse" data-bs-parent="#accordionInstructor3" aria-labelledby="headingInstructor3">
 <div class="accordion-body">
 <p>Remember, you just need to show the basic plot. Just type out the
 ggplot, geom, log scale, and facet wrap lines in class.</p>
@@ -3830,7 +3851,7 @@ coordinate system.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution5" aria-expanded="false" aria-controls="collapseSolution5">
   <h4 class="accordion-header" id="headingSolution5"> Show me the solution </h4>
 </button>
-<div id="collapseSolution5" class="accordion-collapse collapse" aria-labelledby="headingSolution5" data-bs-parent="#accordionSolution5">
+<div id="collapseSolution5" class="accordion-collapse collapse" data-bs-parent="#accordionSolution5" aria-labelledby="headingSolution5">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb14">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -3877,7 +3898,7 @@ marker positions.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution6" aria-expanded="false" aria-controls="collapseSolution6">
   <h4 class="accordion-header" id="headingSolution6"> Show me the solution </h4>
 </button>
-<div id="collapseSolution6" class="accordion-collapse collapse" aria-labelledby="headingSolution6" data-bs-parent="#accordionSolution6">
+<div id="collapseSolution6" class="accordion-collapse collapse" data-bs-parent="#accordionSolution6" aria-labelledby="headingSolution6">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb16">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -3937,7 +3958,7 @@ two column are. Then share your ideas with the class.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution7" aria-expanded="false" aria-controls="collapseSolution7">
   <h4 class="accordion-header" id="headingSolution7"> Show me the solution </h4>
 </button>
-<div id="collapseSolution7" class="accordion-collapse collapse" aria-labelledby="headingSolution7" data-bs-parent="#accordionSolution7">
+<div id="collapseSolution7" class="accordion-collapse collapse" data-bs-parent="#accordionSolution7" aria-labelledby="headingSolution7">
 <div class="accordion-body">
 <p>There are different builds of the mouse genome. The Genome Resource
 Consortium (GRC) named mouse builds from build 1 to 39. The University
@@ -4018,7 +4039,7 @@ of one sample on chromosome 1.</p>
 <button class="accordion-button instructor-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseInstructor4" aria-expanded="false" aria-controls="collapseInstructor4">
   <h3 class="accordion-header" id="headingInstructor4">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="edit-2"></i></div> Instructor Note </h3>
 </button>
-<div id="collapseInstructor4" class="accordion-collapse collapse" aria-labelledby="headingInstructor4" data-bs-parent="#accordionInstructor4">
+<div id="collapseInstructor4" class="accordion-collapse collapse" data-bs-parent="#accordionInstructor4" aria-labelledby="headingInstructor4">
 <div class="accordion-body">
 <p>This code is intended to throw an error. It is used to illustrate the
 point that you have to align the markers between <code>probs</code> and
@@ -4062,7 +4083,7 @@ contains the marker names for chromosome 1.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution8" aria-expanded="false" aria-controls="collapseSolution8">
   <h4 class="accordion-header" id="headingSolution8"> Show me the solution </h4>
 </button>
-<div id="collapseSolution8" class="accordion-collapse collapse" aria-labelledby="headingSolution8" data-bs-parent="#accordionSolution8">
+<div id="collapseSolution8" class="accordion-collapse collapse" data-bs-parent="#accordionSolution8" aria-labelledby="headingSolution8">
 <div class="accordion-body">
 <p>We will write a loop that gets the common markers between probs and
 map for each chromosome and then subsets them.</p>
@@ -4248,7 +4269,7 @@ smaller phenotype data.frame.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution9" aria-expanded="false" aria-controls="collapseSolution9">
   <h4 class="accordion-header" id="headingSolution9"> Show me the solution </h4>
 </button>
-<div id="collapseSolution9" class="accordion-collapse collapse" aria-labelledby="headingSolution9" data-bs-parent="#accordionSolution9">
+<div id="collapseSolution9" class="accordion-collapse collapse" data-bs-parent="#accordionSolution9" aria-labelledby="headingSolution9">
 <div class="accordion-body">
 <p>You can do this by looking at the number of observations for
 <code>pheno_100</code> in the Environment tab or in the Console.</p>
@@ -4316,7 +4337,7 @@ above).</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution10" aria-expanded="false" aria-controls="collapseSolution10">
   <h4 class="accordion-header" id="headingSolution10"> Show me the solution </h4>
 </button>
-<div id="collapseSolution10" class="accordion-collapse collapse" aria-labelledby="headingSolution10" data-bs-parent="#accordionSolution10">
+<div id="collapseSolution10" class="accordion-collapse collapse" data-bs-parent="#accordionSolution10" aria-labelledby="headingSolution10">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb34">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -4456,7 +4477,7 @@ the <code>summary()</code> function.</li>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution11" aria-expanded="false" aria-controls="collapseSolution11">
   <h4 class="accordion-header" id="headingSolution11"> Show me the solution </h4>
 </button>
-<div id="collapseSolution11" class="accordion-collapse collapse" aria-labelledby="headingSolution11" data-bs-parent="#accordionSolution11">
+<div id="collapseSolution11" class="accordion-collapse collapse" data-bs-parent="#accordionSolution11" aria-labelledby="headingSolution11">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb38">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -4534,7 +4555,7 @@ significance threshold.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution12" aria-expanded="false" aria-controls="collapseSolution12">
   <h4 class="accordion-header" id="headingSolution12"> Show me the solution </h4>
 </button>
-<div id="collapseSolution12" class="accordion-collapse collapse" aria-labelledby="headingSolution12" data-bs-parent="#accordionSolution12">
+<div id="collapseSolution12" class="accordion-collapse collapse" data-bs-parent="#accordionSolution12" aria-labelledby="headingSolution12">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb44">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -4773,7 +4794,7 @@ top) and genes (on the bottom) using the ‘top_panel_prop’ argument.</p>
 <button class="accordion-button instructor-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseInstructor5" aria-expanded="false" aria-controls="collapseInstructor5">
   <h3 class="accordion-header" id="headingInstructor5">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="edit-2"></i></div> Instructor Note </h3>
 </button>
-<div id="collapseInstructor5" class="accordion-collapse collapse" aria-labelledby="headingInstructor5" data-bs-parent="#accordionInstructor5">
+<div id="collapseInstructor5" class="accordion-collapse collapse" data-bs-parent="#accordionInstructor5" aria-labelledby="headingInstructor5">
 <div class="accordion-body">
 <p>Note that you have to add the “genes”, “colors”, and “top_panel_prop”
 arguments.</p>
@@ -4806,7 +4827,7 @@ contributes the minor allele at the highlighted SNPs.</p>
 <button class="accordion-button instructor-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseInstructor6" aria-expanded="false" aria-controls="collapseInstructor6">
   <h3 class="accordion-header" id="headingInstructor6">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="edit-2"></i></div> Instructor Note </h3>
 </button>
-<div id="collapseInstructor6" class="accordion-collapse collapse" aria-labelledby="headingInstructor6" data-bs-parent="#accordionInstructor6">
+<div id="collapseInstructor6" class="accordion-collapse collapse" data-bs-parent="#accordionInstructor6" aria-labelledby="headingInstructor6">
 <div class="accordion-body">
 <p>Note that you have to change the “top_panel_prop” argument to
 “panel_prop” and add the “drop_hilit”, “col_hilit”, and “sdp_panel”
@@ -4875,7 +4896,7 @@ button. Then search on <em>Sult3a2</em>.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution13" aria-expanded="false" aria-controls="collapseSolution13">
   <h4 class="accordion-header" id="headingSolution13"> Output </h4>
 </button>
-<div id="collapseSolution13" class="accordion-collapse collapse" aria-labelledby="headingSolution13" data-bs-parent="#accordionSolution13">
+<div id="collapseSolution13" class="accordion-collapse collapse" data-bs-parent="#accordionSolution13" aria-labelledby="headingSolution13">
 <div class="accordion-body">
 <p>Neither <em>Sult3a1</em> or <em>Sult3a2</em> has an eQTL in the DO
 bone marrow data set.</p>
@@ -4911,7 +4932,7 @@ region.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution14" aria-expanded="false" aria-controls="collapseSolution14">
   <h4 class="accordion-header" id="headingSolution14"> Output </h4>
 </button>
-<div id="collapseSolution14" class="accordion-collapse collapse" aria-labelledby="headingSolution14" data-bs-parent="#accordionSolution14">
+<div id="collapseSolution14" class="accordion-collapse collapse" data-bs-parent="#accordionSolution14" aria-labelledby="headingSolution14">
 <div class="accordion-body">
 <p>You should see a plot similar to the one below.</p>
 <p><img src=".././fig/Ensembl_SV_Chr10.png" alt="Ensembl Structural Variants" class="figure">{alt=“Ensembl viewer showing genes
@@ -5012,7 +5033,7 @@ mapping plot.</li>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution15" aria-expanded="false" aria-controls="collapseSolution15">
   <h4 class="accordion-header" id="headingSolution15"> Output </h4>
 </button>
-<div id="collapseSolution15" class="accordion-collapse collapse" aria-labelledby="headingSolution15" data-bs-parent="#accordionSolution15">
+<div id="collapseSolution15" class="accordion-collapse collapse" data-bs-parent="#accordionSolution15" aria-labelledby="headingSolution15">
 <div class="accordion-body">
 <ol style="list-style-type: decimal">
 <li>Plot the distribution of</li>
