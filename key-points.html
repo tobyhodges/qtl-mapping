@@ -255,7 +255,139 @@
 <div class="accordion accordion-flush" id="accordionFlush3">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading3">
-        <a href="do_qtl_mapping.html">2. QTL Mapping in Diversity Outbred Mice</a>
+        <a href="intro_data_set.html">2. Introduction to the Data Set</a>
+    </div>
+<!--/div.accordion-header-->
+
+  </div>
+<!--/div.accordion-item-->
+</div>
+<!--/div.accordion-flush-->
+
+<div class="accordion accordion-flush" id="accordionFlush4">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading4">
+        <a href="input-file-format.html">3. Input File Format</a>
+    </div>
+<!--/div.accordion-header-->
+
+  </div>
+<!--/div.accordion-item-->
+</div>
+<!--/div.accordion-flush-->
+
+<div class="accordion accordion-flush" id="accordionFlush5">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading5">
+        <a href="calc-genoprob.html">4. Calculating Genotype Probabilities</a>
+    </div>
+<!--/div.accordion-header-->
+
+  </div>
+<!--/div.accordion-item-->
+</div>
+<!--/div.accordion-flush-->
+
+<div class="accordion accordion-flush" id="accordionFlush6">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading6">
+        <a href="special-x-covar.html">5. Special covariates for the X chromosome</a>
+    </div>
+<!--/div.accordion-header-->
+
+  </div>
+<!--/div.accordion-item-->
+</div>
+<!--/div.accordion-flush-->
+
+<div class="accordion accordion-flush" id="accordionFlush7">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading7">
+        <a href="perform-genome-scan.html">6. Performing a genome scan</a>
+    </div>
+<!--/div.accordion-header-->
+
+  </div>
+<!--/div.accordion-item-->
+</div>
+<!--/div.accordion-flush-->
+
+<div class="accordion accordion-flush" id="accordionFlush8">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading8">
+        <a href="perform-perm-test.html">7. Performing a permutation test</a>
+    </div>
+<!--/div.accordion-header-->
+
+  </div>
+<!--/div.accordion-item-->
+</div>
+<!--/div.accordion-flush-->
+
+<div class="accordion accordion-flush" id="accordionFlush9">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading9">
+        <a href="find-lod-peaks.html">8. Finding LOD peaks</a>
+    </div>
+<!--/div.accordion-header-->
+
+  </div>
+<!--/div.accordion-item-->
+</div>
+<!--/div.accordion-flush-->
+
+<div class="accordion accordion-flush" id="accordionFlush10">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading10">
+        <a href="calc-kinship.html">9. Calculating A Kinship Matrix</a>
+    </div>
+<!--/div.accordion-header-->
+
+  </div>
+<!--/div.accordion-item-->
+</div>
+<!--/div.accordion-flush-->
+
+<div class="accordion accordion-flush" id="accordionFlush11">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading11">
+        <a href="perform-genome-scan-lmm.html">10. Performing a genome scan with a linear mixed model</a>
+    </div>
+<!--/div.accordion-header-->
+
+  </div>
+<!--/div.accordion-item-->
+</div>
+<!--/div.accordion-flush-->
+
+<div class="accordion accordion-flush" id="accordionFlush12">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading12">
+        <a href="perform-genome-scan-bin.html">11. Performing a genome scan with binary traits</a>
+    </div>
+<!--/div.accordion-header-->
+
+  </div>
+<!--/div.accordion-item-->
+</div>
+<!--/div.accordion-flush-->
+
+<div class="accordion accordion-flush" id="accordionFlush13">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading13">
+        <a href="est-qtl-effects.html">12. Estimated QTL effects</a>
+    </div>
+<!--/div.accordion-header-->
+
+  </div>
+<!--/div.accordion-item-->
+</div>
+<!--/div.accordion-flush-->
+
+<div class="accordion accordion-flush" id="accordionFlush14">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading14">
+        <a href="do_qtl_mapping.html">13. QTL Mapping in Diversity Outbred Mice</a>
     </div>
 <!--/div.accordion-header-->
 
@@ -329,6 +461,74 @@ output</li>
 with your lesson</li>
 <li>Run <code>sandpaper::build_lesson()</code> to preview your lesson
 locally</li>
+</ul></section><section id="intro_data_set"><h2 class="section-heading"><a href="intro_data_set.html">Introduction to the Data Set</a></h2>
+<hr class="half-width">
+<ul>
+<li>Leptin<sup>ob/ob</sup> mice do now produce insulin and become obese
+due to overeating.</li>
+<li>This study crossed mice carrying the Leptin<sup>ob/ob</sup> mutation
+in C57BL/6J and BTBR T+ tf/J.</li>
+<li>C57BL/6J mice are resistant to diabetes and BTBR mice are
+susceptible.</li>
+<li>By crossing these two strains, the authors aimed to identify genes
+which influence susceptibility to T2D.</li>
+</ul></section><section id="input-file-format"><h2 class="section-heading"><a href="input-file-format.html">Input File Format</a></h2>
+<hr class="half-width"></section><section id="calc-genoprob"><h2 class="section-heading"><a href="calc-genoprob.html">Calculating Genotype Probabilities</a></h2>
+<hr class="half-width"></section><section id="special-x-covar"><h2 class="section-heading"><a href="special-x-covar.html">Special covariates for the X chromosome</a></h2>
+<hr class="half-width">
+<ul>
+<li>“The X chromosome requires special treatment in QTL mapping.”</li>
+<li>“Special covariates such as sex should be included to avoid spurious
+evidence of linkage.”</li>
+</ul></section><section id="perform-genome-scan"><h2 class="section-heading"><a href="perform-genome-scan.html">Performing a genome scan</a></h2>
+<hr class="half-width">
+<ul>
+<li>“A qtl2 genome scan requires genotype probabilities and a phenotype
+matrix.”</li>
+<li>“The output from a genome scan contains a LOD score matrix, map
+positions, and phenotypes.”</li>
+<li>“LOD curve plots for a genome scan can be viewed with
+plot_scan1().”</li>
+</ul></section><section id="perform-perm-test"><h2 class="section-heading"><a href="perform-perm-test.html">Performing a permutation test</a></h2>
+<hr class="half-width">
+<ul>
+<li>“A permutation test establishes the statistical significance of a
+genome scan.”</li>
+</ul></section><section id="find-lod-peaks"><h2 class="section-heading"><a href="find-lod-peaks.html">Finding LOD peaks</a></h2>
+<hr class="half-width">
+<ul>
+<li>“LOD peaks and support intervals can be identified with
+find_peaks().”</li>
+</ul></section><section id="calc-kinship"><h2 class="section-heading"><a href="calc-kinship.html">Calculating A Kinship Matrix</a></h2>
+<hr class="half-width">
+<ul>
+<li>“Kinship matrices account for relationships among individuals.”</li>
+<li>“Kinship is calculated as the proportion of shared alleles between
+individuals.”</li>
+<li>“Kinship calculation is a precursor to a genome scan via a linear
+mixed model.”</li>
+</ul></section><section id="perform-genome-scan-lmm"><h2 class="section-heading"><a href="perform-genome-scan-lmm.html">Performing a genome scan with a linear mixed model</a></h2>
+<hr class="half-width">
+<ul>
+<li>“To perform a genome scan with a linear mixed model, supply a
+kinship matrix.”</li>
+<li>“Different mapping and kinship calculation methods give different
+results.”</li>
+</ul></section><section id="perform-genome-scan-bin"><h2 class="section-heading"><a href="perform-genome-scan-bin.html">Performing a genome scan with binary traits</a></h2>
+<hr class="half-width">
+<ul>
+<li>“A genome scan for binary traits (0 and 1) requires special
+handling; scans for non-binary traits assume normal variation of the
+residuals.”</li>
+<li>“A genome scan for binary traits is performed with logistic
+regression.”</li>
+</ul></section><section id="est-qtl-effects"><h2 class="section-heading"><a href="est-qtl-effects.html">Estimated QTL effects</a></h2>
+<hr class="half-width">
+<ul>
+<li>“Estimated founder allele effects can be plotted from the mapping
+model coefficients.”</li>
+<li>“Additive and dominance effects can be plotted using
+contrasts.”</li>
 </ul></section><section id="do_qtl_mapping"><h2 class="section-heading"><a href="do_qtl_mapping.html">QTL Mapping in Diversity Outbred Mice</a></h2>
 <hr class="half-width">
 <ul>
@@ -393,8 +593,8 @@ mapping.</li>
   "url": "https://carpentries.github.io/workbench-template-rmd/key-points.html",
   "identifier": "https://carpentries.github.io/workbench-template-rmd/key-points.html",
   "dateCreated": "2024-09-06",
-  "dateModified": "2024-09-26",
-  "datePublished": "2024-09-26"
+  "dateModified": "2024-10-09",
+  "datePublished": "2024-10-09"
 }
 
   </script><script>
