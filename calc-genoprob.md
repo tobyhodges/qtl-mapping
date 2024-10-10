@@ -661,7 +661,7 @@ integer.
 
 
 ``` r
-pr <- calc_genoprob(cross=iron, map=map, error_prob=0.002, cores=4)
+probs <- calc_genoprob(cross = iron, map = map, error_prob = 0.002, cores = 4)
 ```
 
 **Allele probabilities (optional)** The genome scan functions use genotype 

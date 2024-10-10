@@ -6,14 +6,16 @@ exercises: 30
 
 :::::::::::::::::::::::::::::::::::::: questions 
 
-- "How do I perform a genome scan?"
-- "How do I plot a genome scan?"
+- How do I perform a genome scan?
+- How do I plot a genome scan?
+- How do additive covariates differ from interactive covariates?
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
-- Create a genome scan for a set of traits.
+- Map one trait using additive covariates.
+- Map the sample trait using additive and interactive covariates.
 - Plot a genome scan.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
@@ -42,14 +44,16 @@ Regression aims to find the line of best fit to the data. In the case of a
 backcross with only two genotypes, a t-test is performed at the marker to 
 determine whether the difference in phenotype means is zero.
 
-![adapted from Broman & Sen, 2009](../fig/nullvalt.png)
+![adapted from Broman & Sen, 2009](fig/nullvalt.png)
 
 To find the line of best fit, the residuals or errors are calculated, then 
 squared for each data point.
 
-![](../fig/residual.png)
-![](../fig/squared-residual.png)
-![](../fig/null.png)
+<!-- DMG: We need to change these to use an F2. -->
+
+![](fig/residual.png)
+![](fig/squared-residual.png)
+![](fig/null.png)
 
 The line of best fit will be the one that minimizes the sum of squared 
 residuals, which maximizes the likelihood of the data. 
@@ -73,7 +77,7 @@ conditional genotype probabilities (conditional on known marker genotypes). In
 Haley-Knott regression, phenotype values can be plotted and a regression line 
 drawn through the phenotype mean for the untyped individuals.
 
-![](../fig/hk-regress.png)
+![](fig/hk-regress.png)
 
 As shown by the green circle in the figure, an individual of unknown genotype is 
 placed between known genotypes according to the probability of its genotype 
@@ -84,12 +88,61 @@ To perform a genome scan by Haley-Knott regression
 ([Haley and Knott 1992](https://www.ncbi.nlm.nih.gov/pubmed/16718932)),
 use the function `scan1()`.  `scan1()` takes as input the genotype 
 probabilities, a matrix of phenotypes, and then optional additive and 
-interactive covariates, and the special X chromosome covariates. Another option 
+interactive covariates. Another option 
 is to provide a vector of weights.
+
+## Additive Genome Scan
+
+There are two potential covariates in the Attie data set. Let's look at the
+top of the covariates in the `cross` object.
 
 
 ``` r
-out <- scan1(genoprobs = pr, pheno = iron$pheno, Xcovar=Xcovar)
+head(cross$covar)
+```
+
+``` output
+             Sex pgm adipose_batch gastroc_batch hypo_batch islet_batch
+Mouse3051   Male   1    12/19/2007     8/11/2008 11/26/2007  11/28/2007
+Mouse3551   Male   1    12/19/2007     8/12/2008 11/27/2007  12/03/2007
+Mouse3430   Male   1    12/19/2007     8/12/2008 11/27/2007  12/03/2007
+Mouse3476   Male   1    12/19/2007     8/12/2008 11/27/2007  12/03/2007
+Mouse3414   Male   1    12/18/2007     8/11/2008 11/26/2007  11/28/2007
+Mouse3145 Female   1    12/19/2007     8/11/2008         NA  11/28/2007
+          kidney_batch liver_batch
+Mouse3051   07/15/2008       other
+Mouse3551   07/16/2008  12/10/2007
+Mouse3430   07/15/2008  12/05/2007
+Mouse3476   07/16/2008  12/05/2007
+Mouse3414   07/15/2008  12/05/2007
+Mouse3145   07/15/2008  12/10/2007
+```
+
+`Sex` is potential covariate. It is a good idea to always include
+sex in any analysis. Examples of other covariates might be age, diet, treatment,
+or experimental batch. It is worth taking time to identify covariates that may
+affect your results.
+
+
+
+``` r
+cross$covar$Sex = factor(cross$covar$Sex)
+
+addcovar = model.matrix(~Sex, data = cross$covar)[,-1, drop = FALSE]
+```
+
+When we perform a genome scan with additive covariates, we are searching for loci
+that have the same effect in both covariate groups. In this case, we are 
+searching for loci that affect females and male in the same way.
+
+<!-- DMG: We need a plot of what an additive effect would look like at one marker. -->
+
+
+
+``` r
+lod_add <- scan1(genoprobs = probs, 
+                 pheno     = cross$pheno[,'log10_insulin_10wk'], 
+                 addcovar  = addcovar)
 ```
 
 On a multi-core machine, you can get some speed-up via the `cores` argument, as 
@@ -97,32 +150,35 @@ with `calc_genoprob()` and `calc_kinship()`.
 
 
 ``` r
-out <- scan1(genoprobs = pr, pheno = iron$pheno, Xcovar=Xcovar, cores=4)
+lod_add <- scan1(genoprobs = probs, 
+                 pheno     = cross$pheno[,'log10_insulin_10wk', drop = FALSE], 
+                 addcovar  = addcovar,
+                 cores     = 4)
 ```
 
 The output of `scan1()` is a matrix of LOD scores, positions &times; phenotypes. 
 
 Take a look at the first ten rows of the scan object. The numerical values are 
-the LOD scores for the marker or pseudomarker named at the beginning of the row. 
-LOD values are given for liver and spleen.
+the LOD scores for the marker named at the beginning of the row. 
+LOD values are shown for circulating insulin.
 
 
 ``` r
-head(out, n=10)
+head(lod_add, n = 10)
 ```
 
 ``` output
-             liver    spleen
-D1Mit18  0.2928511 0.4566189
-c1.loc28 0.2815294 0.4378754
-c1.loc29 0.2696594 0.4193363
-c1.loc30 0.2572780 0.4011646
-c1.loc31 0.2444340 0.3835257
-c1.loc32 0.2311884 0.3665798
-c1.loc33 0.2176149 0.3504744
-c1.loc34 0.2037988 0.3353358
-c1.loc35 0.1898359 0.3212614
-c1.loc36 0.1758305 0.3083145
+               pheno1
+rs13475697 0.04674829
+rs3681603  0.04674829
+rs13475703 0.04680494
+rs13475710 0.12953382
+rs6367205  0.13734728
+rs13475716 0.13735534
+rs13475717 0.13735534
+rs13475719 0.13735534
+rs13459050 0.13735534
+rs3680898  0.13735541
 ```
 
 The function `plot_scan1()` can be used to plot the LOD curves. Use the argument 
@@ -130,38 +186,32 @@ The function `plot_scan1()` can be used to plot the LOD curves. Use the argument
 
 
 ``` r
-plot_scan1(out, map = map, lodcolumn = "liver")
+plot_scan1(lod_add, 
+           map = cross$pmap,
+           main = 'log(insulin): 10 weeks')
 ```
 
+<img src="fig/perform-genome-scan-rendered-plot_add_lod-1.png" style="display: block; margin: auto;" />
 
-![](../fig/lod-plot.png)
 
-The LOD plot for liver clearly shows the largest peak is on chromosome 16. There 
-are smaller peaks on chromosomes 2, 7, and 8. Which of these peaks is 
+The LOD plot for insulin shows several peaks, with the largest peak on 
+chromosome 2. There are smaller peaks on other chromosomes. Which of these peaks is 
 significant, and why? We'll evaluate the significance of genome scan results in 
-a later episode on 
+a later episode in 
 [performing a permutation test](https://smcclatchy.github.io/mapping/10-perform-perm-test/).
 
 
+<!-- DMG: Suggestion: let's have the exercises have them plot the LOD score for
+one chromosome, the find the marker with the maximum LOD score and try to 
+find it in the physical map. -->
 
 ::::::::::::::::::::::::::::::::::::: challenge 
 
 ## Challenge 1
-Use the `head()` function to view the first 30 rows of the scan output. What is 
-the next genotyped marker in the scan output? What are its LOD scores for liver 
-and spleen?
 
-:::::::::::::::::::::::: solution 
-
-`head(out, n=30)`  
-D1Mit80  0.02154502 0.2216682
-
-:::::::::::::::::::::::::::::::::
-
-## Challenge 2
 Use the `sort()` function to sort the LOD scores for liver. Hint: run `dim(out)` 
 for the row and column dimensions, or `colnames(out)` for the column names.   
-Which pseudomarker has the highest LOD score? Which genotyped marker has the 
+Which marker has the highest LOD score? Which genotyped marker has the 
 highest LOD score? What chromosome number are they on? 
 
 :::::::::::::::::::::::: solution 
@@ -177,7 +227,8 @@ located on chromosome 16.
 
 ::::::::::::::::::::::::::::::::::::: challenge 
 
-## Challenge 3
+## Challenge 2
+
 Use the `sort()` function to sort the LOD scores for spleen. Which pseudomarker 
 has the highest LOD score? Which genotyped marker has the highest LOD score? 
 What chromosome number are they on? 
@@ -191,7 +242,7 @@ located on chromosome 9.
 
 :::::::::::::::::::::::::::::::::
 
-## Challenge 4
+## Challenge 3
 
 Plot the LOD scores for spleen. Does the genome scan for spleen share any 
 large-ish peaks with the scan for liver?
@@ -205,12 +256,76 @@ near 4.
 :::::::::::::::::::::::::::::::::
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
+## Interactive Genome Scan
+
+Above, we mapped insulin levels using sex as an additive covariate and searched
+for loci where both sexes had the same effect. But what if the two sexes have
+different effects? The we would like to map in a way that allows each sex to
+have different effects. We do this using an interactive genome scan.
+
+You should always include the interactive covariates as additive covariates as
+well. In this case, we only have sex as a covariate, so we can use the additive
+covariate matrix. For clarity, we will make a copy and name it for the 
+interactive covariates.
+
+
+``` r
+intcovar = addcovar
+```
+
+
+
+``` r
+lod_int <- scan1(genoprobs = probs, 
+                 pheno     = cross$pheno[,'log10_insulin_10wk'], 
+                 addcovar  = addcovar,
+                 intcovar  = intcovar)
+```
+
+
+
+``` r
+plot_scan1(x = lod_int, map = cross$pmap, main = 'log10_insulin_10wk')
+```
+
+<img src="fig/perform-genome-scan-rendered-plot_int-1.png" style="display: block; margin: auto;" />
+
+It is difficult to tell if there is a difference in LOD scores between the 
+additive and interactive scans. To resolve this, we can plot both genome scans
+in the same plo using the "add = TRUE" argument.
+
+
+``` r
+plot_scan1(x = lod_int, map = cross$pmap, main = 'log10_insulin_10wk')
+plot_scan1(x = lod_add, map = cross$pmap, col = 'blue', add = TRUE)
+```
+
+<img src="fig/perform-genome-scan-rendered-plot_add_int_lod-1.png" style="display: block; margin: auto;" />
+
+It is still difficult to tell whether any peaks differ by sex. Another way 
+to view the plot is to plot the difference between the interactive and additive
+scans.
+
+
+``` r
+plot_scan1(x = lod_int, map = cross$pmap, main = 'log10_insulin_10wk')
+plot_scan1(x = lod_add, map = cross$pmap, col = 'blue', add = TRUE)
+plot_scan1(x = lod_int - lod_add, map = cross$pmap, col = 'red', add = TRUE)
+```
+
+<img src="fig/perform-genome-scan-rendered-plot_add_int_diff_lod-1.png" style="display: block; margin: auto;" />
+
+While it was important to look at the effect of sex on the trait, in this 
+experiment, there do not appear to be any sex-specific peaks.
+
+<!-- DMG: Add challenge asking students why we didn't map and plot females and
+males separately. Maybe they can even try it. -->
 
 ::::::::::::::::::::::::::::::::::::: keypoints 
 
-- "A qtl2 genome scan requires genotype probabilities and a phenotype matrix."
-- "The output from a genome scan contains a LOD score matrix, map positions, and phenotypes."
-- "LOD curve plots for a genome scan can be viewed with plot_scan1()."
+- A qtl2 genome scan requires genotype probabilities and a phenotype matrix.
+- The output from a genome scan contains a LOD score matrix, map positions, and phenotypes.
+- LOD curve plots for a genome scan can be viewed with plot_scan1().
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
