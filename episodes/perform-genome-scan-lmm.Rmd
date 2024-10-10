@@ -27,6 +27,9 @@ suppressPackageStartupMessages(library(qtl2))
 cross <- read_cross2(file = 'https://thejacksonlaboratory.box.com/shared/static/svw7ivp5hhmd7vb8fy26tc53h7r85wez.zip')
 probs <- calc_genoprob(cross = cross, map = cross$gmap, error_prob = 0.002)
 kinship_loco  <- calc_kinship(probs = probs, type = 'loco')
+# Covariates.
+cross$covar$Sex <- factor(cross$covar$Sex)
+addcovar <- model.matrix(~Sex, data = cross$covar)[,-1, drop = FALSE]
 # LOD scan for insulin.
 lod_add <- scan1(genoprobs = probs, pheno     = cross$pheno[,'log10_insulin_10wk'], 
                  addcovar  = addcovar)
