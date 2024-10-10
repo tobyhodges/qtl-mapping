@@ -66,7 +66,6 @@ contact: 'susan.mcclatchy@jax.org'
 
 # Order of episodes in your lesson
 episodes:
-- introduction.Rmd
 - intro_data_set.Rmd
 - input-file-format.Rmd
 - calc-genoprob.Rmd
@@ -79,7 +78,6 @@ episodes:
 - find-lod-peaks.Rmd
 - est-qtl-effects.Rmd
 - integrating-gene-expression.Rmd
-#- snp-assoc.Rmd
 - do_qtl_mapping.Rmd
 
 # Information for Learners
