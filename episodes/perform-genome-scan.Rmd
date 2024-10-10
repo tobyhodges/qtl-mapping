@@ -53,7 +53,7 @@ determine whether the difference in phenotype means is zero.
 To find the line of best fit, the residuals or errors are calculated, then 
 squared for each data point.
 
-<!-- DMG: We need to change these to use an F2. -->
+<!-- DMG: We need to change these next figures to use an F2. -->
 
 ![](fig/residual.png)
 ![](fig/squared-residual.png)
@@ -111,9 +111,9 @@ affect your results.
 
 
 ```{r make_addcovar}
-cross$covar$Sex = factor(cross$covar$Sex)
+cross$covar$Sex <- factor(cross$covar$Sex)
 
-addcovar = model.matrix(~Sex, data = cross$covar)[,-1, drop = FALSE]
+addcovar <- model.matrix(~Sex, data = cross$covar)[,-1, drop = FALSE]
 ```
 
 When we perform a genome scan with additive covariates, we are searching for loci
@@ -132,7 +132,7 @@ lod_add <- scan1(genoprobs = probs,
 On a multi-core machine, you can get some speed-up via the `cores` argument, as 
 with `calc_genoprob()` and `calc_kinship()`.
 
-```{r scan1_multicore, eval=FALSE}
+```{r add_scan1_multicore, eval=FALSE}
 lod_add <- scan1(genoprobs = probs, 
                  pheno     = cross$pheno[,'log10_insulin_10wk', drop = FALSE], 
                  addcovar  = addcovar,
@@ -154,10 +154,9 @@ The function `plot_scan1()` can be used to plot the LOD curves. Use the argument
 
 ```{r plot_add_lod}
 plot_scan1(lod_add, 
-           map = cross$pmap,
+           map  = cross$pmap,
            main = 'log(insulin): 10 weeks')
 ```
-
 
 The LOD plot for insulin shows several peaks, with the largest peak on 
 chromosome 2. There are smaller peaks on other chromosomes. Which of these peaks is 

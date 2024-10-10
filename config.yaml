@@ -72,12 +72,13 @@ episodes:
 - calc-genoprob.Rmd
 #- special-x-covar.Rmd
 - perform-genome-scan.Rmd
-- perform-perm-test.Rmd
-- find-lod-peaks.Rmd
 - calc-kinship.Rmd
 - perform-genome-scan-lmm.Rmd
 - perform-genome-scan-bin.Rmd
+- perform-perm-test.Rmd
+- find-lod-peaks.Rmd
 - est-qtl-effects.Rmd
+- integrating-gene-expression.Rmd
 #- snp-assoc.Rmd
 - do_qtl_mapping.Rmd
 
