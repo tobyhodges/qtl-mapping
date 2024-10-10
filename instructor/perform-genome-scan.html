@@ -263,7 +263,7 @@
 <div class="accordion accordion-flush" id="accordionFlush7">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading7">
-        <a href="perform-perm-test.html">6. Performing a permutation test</a>
+        <a href="calc-kinship.html">6. Calculating A Kinship Matrix</a>
     </div><!--/div.accordion-header-->
 
   </div><!--/div.accordion-item-->
@@ -272,7 +272,7 @@
 <div class="accordion accordion-flush" id="accordionFlush8">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading8">
-        <a href="find-lod-peaks.html">7. Finding LOD peaks</a>
+        <a href="perform-genome-scan-lmm.html">7. Performing a genome scan with a linear mixed model</a>
     </div><!--/div.accordion-header-->
 
   </div><!--/div.accordion-item-->
@@ -281,7 +281,7 @@
 <div class="accordion accordion-flush" id="accordionFlush9">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading9">
-        <a href="calc-kinship.html">8. Calculating A Kinship Matrix</a>
+        <a href="perform-genome-scan-bin.html">8. Performing a genome scan with binary traits</a>
     </div><!--/div.accordion-header-->
 
   </div><!--/div.accordion-item-->
@@ -290,7 +290,7 @@
 <div class="accordion accordion-flush" id="accordionFlush10">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading10">
-        <a href="perform-genome-scan-lmm.html">9. Performing a genome scan with a linear mixed model</a>
+        <a href="perform-perm-test.html">9. Performing a permutation test</a>
     </div><!--/div.accordion-header-->
 
   </div><!--/div.accordion-item-->
@@ -299,7 +299,7 @@
 <div class="accordion accordion-flush" id="accordionFlush11">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading11">
-        <a href="perform-genome-scan-bin.html">10. Performing a genome scan with binary traits</a>
+        <a href="find-lod-peaks.html">10. Finding LOD peaks</a>
     </div><!--/div.accordion-header-->
 
   </div><!--/div.accordion-item-->
@@ -317,7 +317,16 @@
 <div class="accordion accordion-flush" id="accordionFlush13">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading13">
-        <a href="do_qtl_mapping.html">12. QTL Mapping in Diversity Outbred Mice</a>
+        <a href="integrating-gene-expression.html">12. Integrating Gene Expression Data</a>
+    </div><!--/div.accordion-header-->
+
+  </div><!--/div.accordion-item-->
+</div><!--/div.accordion-flush-->
+
+<div class="accordion accordion-flush" id="accordionFlush14">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading14">
+        <a href="do_qtl_mapping.html">13. QTL Mapping in Diversity Outbred Mice</a>
     </div><!--/div.accordion-header-->
 
   </div><!--/div.accordion-item-->
@@ -366,7 +375,7 @@
   <div class="col-xl-8 col-lg-12 primary-content">
     <nav class="lesson-content mx-md-4" aria-label="Previous and Next Chapter"><!-- content for small screens --><div class="d-block d-sm-block d-md-none">
         <a class="chapter-link" href="../instructor/calc-genoprob.html"><i aria-hidden="true" class="small-arrow" data-feather="arrow-left"></i>Previous</a>
-        <a class="chapter-link float-end" href="../instructor/perform-perm-test.html">Next<i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i></a>
+        <a class="chapter-link float-end" href="../instructor/calc-kinship.html">Next<i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i></a>
       </div>
       <!-- content for large screens -->
       <div class="d-none d-sm-none d-md-block">
@@ -374,8 +383,8 @@
           <i aria-hidden="true" class="small-arrow" data-feather="arrow-left"></i>
           Previous: Calculating Genotype
         </a>
-        <a class="chapter-link float-end" href="../instructor/perform-perm-test.html" rel="next">
-          Next: Performing a...
+        <a class="chapter-link float-end" href="../instructor/calc-kinship.html" rel="next">
+          Next: Calculating A...
           <i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i>
         </a>
       </div>
@@ -442,7 +451,7 @@ to determine whether the difference in phenotype means is zero.</p>
 <figure><img src="../fig/nullvalt.png" alt="adapted from Broman &amp; Sen, 2009" class="figure mx-auto d-block"><div class="figcaption">adapted from Broman &amp; Sen, 2009</div>
 </figure><p>To find the line of best fit, the residuals or errors are calculated,
 then squared for each data point.</p>
-<!-- DMG: We need to change these to use an F2. -->
+<!-- DMG: We need to change these next figures to use an F2. -->
 <p><img src="../fig/residual.png" class="figure"><img src="../fig/squared-residual.png" class="figure"><img src="../fig/null.png" class="figure"></p>
 <p>The line of best fit will be the one that minimizes the sum of
 squared residuals, which maximizes the likelihood of the data.</p>
@@ -509,9 +518,9 @@ identify covariates that may affect your results.</p>
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">cross</span><span class="op">$</span><span class="va">covar</span><span class="op">$</span><span class="va">Sex</span> <span class="op">=</span> <span class="fu">factor</span><span class="op">(</span><span class="va">cross</span><span class="op">$</span><span class="va">covar</span><span class="op">$</span><span class="va">Sex</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">cross</span><span class="op">$</span><span class="va">covar</span><span class="op">$</span><span class="va">Sex</span> <span class="op">&lt;-</span> <span class="fu">factor</span><span class="op">(</span><span class="va">cross</span><span class="op">$</span><span class="va">covar</span><span class="op">$</span><span class="va">Sex</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">addcovar</span> <span class="op">=</span> <span class="fu">model.matrix</span><span class="op">(</span><span class="op">~</span><span class="va">Sex</span>, data <span class="op">=</span> <span class="va">cross</span><span class="op">$</span><span class="va">covar</span><span class="op">)</span><span class="op">[</span>,<span class="op">-</span><span class="fl">1</span>, drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span></span></code></pre>
+<span><span class="va">addcovar</span> <span class="op">&lt;-</span> <span class="fu">model.matrix</span><span class="op">(</span><span class="op">~</span><span class="va">Sex</span>, data <span class="op">=</span> <span class="va">cross</span><span class="op">$</span><span class="va">covar</span><span class="op">)</span><span class="op">[</span>,<span class="op">-</span><span class="fl">1</span>, drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span></span></code></pre>
 </div>
 <p>When we perform a genome scan with additive covariates, we are
 searching for loci that have the same effect in both covariate groups.
@@ -572,7 +581,7 @@ to plot.</p>
 </h3>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">plot_scan1</span><span class="op">(</span><span class="va">lod_add</span>, </span>
-<span>           map <span class="op">=</span> <span class="va">cross</span><span class="op">$</span><span class="va">pmap</span>,</span>
+<span>           map  <span class="op">=</span> <span class="va">cross</span><span class="op">$</span><span class="va">pmap</span>,</span>
 <span>           main <span class="op">=</span> <span class="st">'log(insulin): 10 weeks'</span><span class="op">)</span></span></code></pre>
 </div>
 <figure><img src="../fig/perform-genome-scan-rendered-plot_add_lod-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>The LOD plot for insulin shows several peaks, with the largest peak
@@ -748,7 +757,7 @@ any links that you are not going to use.
 </section></div> <!-- / div.lesson-content -->
     </main><!-- / main#main-content.main-content --><nav class="bottom-pagination mx-md-4" aria-label="Previous and Next Chapter"><div class="d-block d-sm-block d-md-none">
         <a class="chapter-link" href="../instructor/calc-genoprob.html"><i aria-hidden="true" class="small-arrow" data-feather="arrow-left"></i>Previous</a>
-        <a class="chapter-link float-end" href="../instructor/perform-perm-test.html">Next<i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i></a>
+        <a class="chapter-link float-end" href="../instructor/calc-kinship.html">Next<i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i></a>
       </div>
       <!-- content for large screens -->
       <div class="d-none d-sm-none d-md-block">
@@ -756,8 +765,8 @@ any links that you are not going to use.
           <i aria-hidden="true" class="small-arrow" data-feather="arrow-left"></i>
           Previous: Calculating Genotype
         </a>
-        <a class="chapter-link float-end" href="../instructor/perform-perm-test.html" rel="next">
-          Next: Performing a...
+        <a class="chapter-link float-end" href="../instructor/calc-kinship.html" rel="next">
+          Next: Calculating A...
           <i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i>
         </a>
       </div>
