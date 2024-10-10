@@ -17,33 +17,14 @@ exercises: 20
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: instructor
 
-``` warning
-Warning in readChar(con, 5L, useBytes = TRUE): cannot open compressed file
-'../data/operm.Rdata', probable reason 'No such file or directory'
-```
+We need the following block for the site to build on Github. The students do
+not need to see or run the next block.
 
-``` error
-Error in readChar(con, 5L, useBytes = TRUE): cannot open the connection
-```
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-``` warning
-Warning in readChar(con, 5L, useBytes = TRUE): cannot open compressed file
-'../data/operm2.Rdata', probable reason 'No such file or directory'
-```
 
-``` error
-Error in readChar(con, 5L, useBytes = TRUE): cannot open the connection
-```
-
-``` warning
-Warning in readChar(con, 5L, useBytes = TRUE): cannot open compressed file
-'../data/operm_bin.Rdata', probable reason 'No such file or directory'
-```
-
-``` error
-Error in readChar(con, 5L, useBytes = TRUE): cannot open the connection
-```
 
 To establish the statistical significance of the results of a genome scan, a 
 permutation test can identify the maximum LOD score that can occur by random 
@@ -75,9 +56,18 @@ provide it with the genotype probabilities, the phenotype data, X covariates and
 number of permutations. For expediency, we'll use only 10 permutations, although 
 1000 is recommended.
 
+:::::::::::::::::::::::::::::::::::::::::::::::: instructor
+
+Replace number of permutations (1000) with 10 for expediency.
+1000 permutations takes about 2 minutes.
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 ``` r
-operm <- scan1perm(genoprobs = pr, pheno = iron$pheno, Xcovar = Xcovar, n_perm = 1000) # replace 1000 with 10 for expediency
+add_perm <- scan1perm(genoprobs = probs, 
+                      pheno     = cross$pheno[,'log10_insulin_10wk'],
+                      addcovar  = addcovar,
+                      n_perm    = 1000) 
 ```
 
 Note the need to specify special covariates for the X chromosome (via `Xcovar`), 

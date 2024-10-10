@@ -49,7 +49,7 @@ determine whether the difference in phenotype means is zero.
 To find the line of best fit, the residuals or errors are calculated, then 
 squared for each data point.
 
-<!-- DMG: We need to change these to use an F2. -->
+<!-- DMG: We need to change these next figures to use an F2. -->
 
 ![](fig/residual.png)
 ![](fig/squared-residual.png)
@@ -126,9 +126,9 @@ affect your results.
 
 
 ``` r
-cross$covar$Sex = factor(cross$covar$Sex)
+cross$covar$Sex <- factor(cross$covar$Sex)
 
-addcovar = model.matrix(~Sex, data = cross$covar)[,-1, drop = FALSE]
+addcovar <- model.matrix(~Sex, data = cross$covar)[,-1, drop = FALSE]
 ```
 
 When we perform a genome scan with additive covariates, we are searching for loci
@@ -187,12 +187,11 @@ The function `plot_scan1()` can be used to plot the LOD curves. Use the argument
 
 ``` r
 plot_scan1(lod_add, 
-           map = cross$pmap,
+           map  = cross$pmap,
            main = 'log(insulin): 10 weeks')
 ```
 
 <img src="fig/perform-genome-scan-rendered-plot_add_lod-1.png" style="display: block; margin: auto;" />
-
 
 The LOD plot for insulin shows several peaks, with the largest peak on 
 chromosome 2. There are smaller peaks on other chromosomes. Which of these peaks is 

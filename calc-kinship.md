@@ -69,7 +69,7 @@ input.
 
 
 ``` r
-kinship <- calc_kinship(probs = pr)
+kinship <- calc_kinship(probs = probs)
 ```
 
 Take a look at the kinship values calculated for the first 5 individuals.
@@ -80,19 +80,19 @@ kinship[1:5, 1:5]
 ```
 
 ``` output
-          1         2         3         4         5
-1 0.6780378 0.5070425 0.4770823 0.5100762 0.5193062
-2 0.5070425 0.5612483 0.5139017 0.4777593 0.5049052
-3 0.4770823 0.5139017 0.7272491 0.5147456 0.5393396
-4 0.5100762 0.4777593 0.5147456 0.7153455 0.5359428
-5 0.5193062 0.5049052 0.5393396 0.5359428 0.5775571
+          Mouse3051 Mouse3551 Mouse3430 Mouse3476 Mouse3414
+Mouse3051     0.737     0.501     0.535     0.520     0.510
+Mouse3551     0.501     0.758     0.515     0.512     0.499
+Mouse3430     0.535     0.515     0.749     0.458     0.493
+Mouse3476     0.520     0.512     0.458     0.749     0.434
+Mouse3414     0.510     0.499     0.493     0.434     0.696
 ```
 
 We can also look at the first 50 mice in the kinship matrix.
 
 
 ``` r
-n_samples <- 25
+n_samples <- 50
 heatmap(kinship[1:n_samples, 1:n_samples], symm = TRUE)
 ```
 
@@ -106,58 +106,29 @@ mouse is closely related to itself, so the cells along the diagonal tend to be
 darker than the other cells. You can see some evidence of related mice, possibly 
 siblings, in the orange-shaded blocks along the diagonal.
 
-
 By default, the genotype probabilities are converted to allele probabilities, 
 and the kinship matrix is calculated as the proportion of shared alleles. To use 
 genotype probabilities instead, use `use_allele_probs=FALSE` in the call to 
 `calc_kinship()`. Further, by default we omit the X chromosome and only use the 
 autosomes. To include the X chromosome, use `omit_x=FALSE`.
 
-In calculating the kinship matrix, you can eliminate the effect of varying 
-marker density across the genome, and only use the probabilities along the grid 
-of pseudomarkers (defined by the `step` argument to `insert_pseudomarkers()`. To 
-do so, we need to first use `calc_grid()` to determine the grid of 
-pseudomarkers, and then `probs_to_grid()` to probabilities for positions that 
-are not on the grid.
-
-
-``` r
-grid <- calc_grid(map = iron$gmap, step=1)
-pr_grid <- probs_to_grid(probs = pr, grid = grid)
-kinship_grid <- calc_kinship(probs = pr_grid)
-```
-
 On a multi-core machine, you can get some speed-up via the `cores` argument, as 
 with `calc_genoprob()`.
 
 
 ``` r
-kinship <- calc_kinship(pr, cores=4)
+kinship <- calc_kinship(probs = probs, 
+                        cores = 4)
 ```
+
+<!-- DMG: Maybe a challenge around finding siblings? Or looking at the mean relatedness? -->
+
+<!-- DMG: We could ask the students why the kinship of a mouse with itself isnt' 1. -->
 
 ::::::::::::::::::::::::::::::::::::: challenge 
 
 ## Challenge 1
 
-1). Insert pseudomarkers into a new map called `sparser_map` at 
-2 cM intervals.  
-2). Calculate genotype probabilities and save as an object called `pr2`. 
-Leave the error probability at the default value.  
-3). Calculate kinship with these new probabilities. Save as `kinship2`.  
-4). View the first several rows and columns of the `kinship2` matrix and 
-compare to the original `kinship` matrix with a heatmap.
-
-:::::::::::::::::::::::: solution 
-
-1). `sparser_map <- insert_pseudomarkers(map = map, step = 2)`   
-2). `pr2 <- calc_genoprob(cross = iron, map = sparser_map)`  
-3). `kinship2 <- calc_kinship(probs = pr2)`  
-4). `kinship2[1:5, 1:5]` and `heatmap(kinship2[1:n_samples, 1:n_samples], symm = TRUE)`
-
-:::::::::::::::::::::::::::::::::
-
-
-## Challenge 2
 
 Think about what a kinship matrix is and what it represents. Share your 
 understanding with a neighbor. Write your explanation in the collaborative 
@@ -171,11 +142,11 @@ document or in your own personal notes.
 
 ::::::::::::::::::::::::::::::::::::: keypoints 
 
-- "Kinship matrices account for relationships among individuals."
-- "Kinship is calculated as the proportion of shared alleles between 
-individuals."
-- "Kinship calculation is a precursor to a genome scan via a linear mixed 
-model."
+- Kinship matrices account for relationships among individuals.
+- Kinship is calculated as the proportion of shared alleles between 
+individuals.
+- Kinship calculation is a precursor to a genome scan via a linear mixed 
+model.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
