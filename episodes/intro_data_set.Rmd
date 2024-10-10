@@ -1,4 +1,4 @@
----
+ ---
 title: "Introduction to the Data Set"
 teaching: 30
 exercises: 5
@@ -24,6 +24,8 @@ experiment involving Type 2 diabetes (T2D). There are two types of diabetes:
 type 1, in which the immune system attacks insulin-secreting cells and prevents
 insulin production, and type 2, in which the pancreas makes less insulin and
 the body becomes less responsive to insulin.
+
+![Insulin resistance in Type 2 diabetes](fig/healthy-vs-T2D.png)
 
 This study is from [Tian et al](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4649649/)
 and involves an intercross between the diabetes-resistant C57BL/6J (BL^) strain and 
