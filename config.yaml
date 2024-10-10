@@ -8,7 +8,7 @@
 # lc: Library Carpentry
 # cp: Carpentries (to use for instructor training for instance)
 # incubator: The Carpentries Incubator
-# 
+#
 # This option supports custom types so lessons can be branded
 # and themed with your own logo and alt-text (see `carpentry_description`)
 # See https://carpentries.github.io/sandpaper-docs/editing.html#adding-a-custom-logo
@@ -65,29 +65,31 @@ contact: 'susan.mcclatchy@jax.org'
 # - another-learner.md
 
 # Order of episodes in your lesson
-episodes: 
+episodes:
 - introduction.Rmd
-- input-file-format.Rmd   
-- calc-genoprob.Rmd         
-- special-x-covar.Rmd          
-- perform-genome-scan.Rmd      
-- perform-perm-test.Rmd        
-- find-lod-peaks.Rmd          
-- calc-kinship.Rmd            
+- intro_data_set.Rmd
+- input-file-format.Rmd
+- calc-genoprob.Rmd
+#- special-x-covar.Rmd
+- perform-genome-scan.Rmd
+- calc-kinship.Rmd
 - perform-genome-scan-lmm.Rmd
 - perform-genome-scan-bin.Rmd
+- perform-perm-test.Rmd
+- find-lod-peaks.Rmd
 - est-qtl-effects.Rmd
-- snp-assoc.Rmd
+- integrating-gene-expression.Rmd
+#- snp-assoc.Rmd
 - do_qtl_mapping.Rmd
 
 # Information for Learners
-learners: 
+learners:
 
 # Information for Instructors
-instructors: 
+instructors:
 
 # Learner Profiles
-profiles: 
+profiles:
 
 # Customisation ---------------------------------------------
 #
