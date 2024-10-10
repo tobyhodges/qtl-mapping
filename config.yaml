@@ -70,7 +70,7 @@ episodes:
 - intro_data_set.Rmd
 - input-file-format.Rmd
 - calc-genoprob.Rmd
-- special-x-covar.Rmd
+#- special-x-covar.Rmd
 - perform-genome-scan.Rmd
 - perform-perm-test.Rmd
 - find-lod-peaks.Rmd

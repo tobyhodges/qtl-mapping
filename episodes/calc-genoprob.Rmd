@@ -255,7 +255,7 @@ datasets on a multi-core machine, you can use the argument `cores`. With
 integer.
 
 ```{r calc_genoprob_multicore, eval=FALSE}
-pr <- calc_genoprob(cross=iron, map=map, error_prob=0.002, cores=4)
+probs <- calc_genoprob(cross = iron, map = map, error_prob = 0.002, cores = 4)
 ```
 
 **Allele probabilities (optional)** The genome scan functions use genotype 
